@@ -32,7 +32,7 @@ class HomeController extends Controller
 
         $schedule = LoanSchedule::with('member')->where('status', 'draft')->orderBy('date','asc')->limit(10)->get();
 
-        if($payment === 0 || $loan === 0) {
+        if($payment !== 0 || $loan !== 0) {
             
             $percentage = [
                 "payment" => ($payment / $loan) * 100,
