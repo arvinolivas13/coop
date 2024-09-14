@@ -1,0 +1,50 @@
+div#printModal .modal-content,
+div#loanScheduleModal .modal-content,
+div#loanPaymentModal .modal-content {
+    max-width: 1200px;
+}
+
+th.approve-tbl {
+    width: 20% !important;
+}
+
+span.status-approve {
+    color: green;
+    font-weight: bold;
+}
+
+span.status-draft {
+    font-weight: bold;
+    color: orange;
+}
+
+span.status-decline {
+    font-weight: bold;
+    color: red;
+}
+
+span.status-release {
+    font-weight: bold;
+    color: blue;
+}
+
+.card-content {
+    padding: 15px;
+    background: #eee;
+    border-radius: 5px;
+}
+
+.card-title {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.card-amount {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.loan_purpose,
+.purpose_amount {
+    padding: 5px 15px;
+}

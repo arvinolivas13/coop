@@ -1,0 +1,42 @@
+div#printModal .modal-content {
+    width: 1200px;
+}
+
+div#purpose_list {
+    padding: 5px 10px;
+}
+
+table#table td {
+    font-size: 12px !important;
+}
+
+.image-previewer {
+    width: 2in;
+    height: 2in;
+    background-position: center center !important;
+    background-size: cover !important;
+}
+
+.image-previewer-2 {
+    width: 6in;
+    height: 2in;
+    background-position: center center !important;
+    background-size: cover !important;
+    background: #eee;
+    text-align: center;
+    font-weight: normal;
+    border: dashed 1px #000;
+}
+
+.mb-2 {
+    margin-bottom: 20px;
+}
+
+span#cap_account_no {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.body-print, .header-print {
+    display: none;
+}
