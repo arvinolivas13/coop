@@ -32,10 +32,19 @@ class HomeController extends Controller
 
         $schedule = LoanSchedule::with('member')->where('status', 'draft')->orderBy('date','asc')->limit(10)->get();
 
-        $percentage = [
-            "payment" => ($payment / $loan) * 100,
-            "receivable" => ($receivable / $loan) * 100,
-        ];
+        if($payment === 0 || $loan === 0) {
+            
+            $percentage = [
+                "payment" => ($payment / $loan) * 100,
+                "receivable" => ($receivable / $loan) * 100,
+            ];
+        }
+        else {
+            $percentage = [
+                "payment" => 100,
+                "receivable" => 100,
+            ];
+        }
 
         return view('admin.content.dashboard', compact('payment', 'loan', 'receivable', 'share_capital', 'savings', 'membership', 'processing_fee', 'schedule', 'total_fund', 'percentage'));
     }
