@@ -1,0 +1,40 @@
+
+.bg-primary {
+    color: #fff !important;
+    background-color: #337ab7 !important;
+}
+
+.bg-primary h5,
+.bg-primary h2,
+.bg-primary span {
+    color: #fff !important;
+}
+
+.bg-primary .progress-bar.progress-bar-success {
+    background: #00ff2f;
+}
+
+.schedule-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+span.member-name {
+    font-weight: bold;
+    color: #337ab7;
+}
+
+span.member-date {
+    color: gray;
+}
+
+span.member-price {
+    color: green;
+    font-weight: bold;
+}
+
+.schedule-list {
+    height: 345px;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+}
