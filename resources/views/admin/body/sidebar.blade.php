@@ -45,6 +45,20 @@
                             </li>
                         </ul>
                     </li>
+                    
+                    <li>
+                        <a class="has-arrow" href="#" aria-expanded="false">
+                            <span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">User Setup</span>
+                        </a>
+                        <ul class="submenu-angle" aria-expanded="false">
+                            <li>
+                                <a title="Transaction" href="{{url('/reports/transaction')}}"><span class="mini-sub-pro">Account</span></a>
+                            </li>
+                            <li>
+                                <a title="Transaction" href="{{url('/reports/transaction')}}"><span class="mini-sub-pro">Role</span></a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>

@@ -6,7 +6,7 @@
     <div class="error-page-int">
         <div class="text-center m-b-md custom-login">
             <a href="index.html"><img class="main-logo" src="img/logo/logo.png" alt="" /></a>
-            <h3>PLEASE LOGIN TO APP</h3>
+            <h3>LOGIN FORM</h3>
         </div>
         <div class="content-error">
             <div class="hpanel">
