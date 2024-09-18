@@ -21,6 +21,7 @@ class CreateLoanRequestsTable extends Migration
             $table->string('payment_frequency');
             $table->string('no_of_payment');
             $table->string('loan_amount');
+            $table->string('loan_date');
             $table->string('reference_name_1')->nullable();
             $table->string('reference_phone_1')->nullable();
             $table->string('reference_relationship_1')->nullable();

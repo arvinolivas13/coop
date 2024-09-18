@@ -134,6 +134,12 @@ function onDblClickRow(row, type) {
     $(`.${type}-acc-number-display`).text(formatNumber(row.id));
     $(`#${type}`).val(`${row.firstname} ${row.middlename} ${row.lastname}`);
     $(`#${type}_id`).val(row.id);
+
+    if(type === "member") {
+        $('#income_type').val('monthly');
+        $('#income_amount').val(row.monthly_income);
+    }
+
     $('#selectModal').modal('hide');
 }
 
@@ -159,6 +165,7 @@ function saveLoanRequest() {
         payment_frequency: $('#payment_frequency').val(),
         no_of_payment: $('#no_of_payment').val(),
         loan_amount: $('#loan_amount').val(),
+        loan_date: $('#loan_date').val(),
         reference_name_1: $('#reference_name_1').val(),
         reference_phone_1: $('#reference_phone_1').val(),
         reference_relationship_1: $('#reference_relationship_1').val(),

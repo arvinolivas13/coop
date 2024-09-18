@@ -353,11 +353,14 @@ function memberType() {
 }
 
 // Loan
-function applyLoan(id, name) {
+function applyLoan(id, name, monthly) {
     record.id = id;
 
     $('#account_number').val(formatNumber(id));
     $('#account_name').val(name);
+    $('#income_type').val('monthly');
+    $('#income_amount').val(monthly);
+
     $('#purpose_list').html('');
     $('#loanApplicationModal').modal('show');
 }
@@ -371,6 +374,7 @@ function saveLoanRequest() {
         payment_frequency: $('#payment_frequency').val(),
         no_of_payment: $('#no_of_payment').val(),
         loan_amount: $('#loan_amount').val(),
+        loan_date: $('#loan_date').val(),
         reference_name_1: $('#reference_name_1').val(),
         reference_phone_1: $('#reference_phone_1').val(),
         reference_relationship_1: $('#reference_relationship_1').val(),
@@ -726,7 +730,7 @@ var formatter = {
         return `<span class="btn btn-light btn-sm" style="font-weight: bold;">${currency(amount)}</span>`;
     },
     action(v, r, i) {
-        return `<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>  <a href="#" onclick="applyLoan(${r.id}, '${r.firstname} ${r.middlename} ${r.lastname}')" class="text-primary" title="Request Loan"><i class="fa fa-credit-card"></i></a> <a href="#" onclick="addDetails(${r.id})"><i class="fa fa-check text-success" aria-hidden="true"></i></a>`;
+        return `<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>  <a href="#" onclick="applyLoan(${r.id}, '${r.firstname} ${r.middlename} ${r.lastname}', '${r.monthly_income}')" class="text-primary" title="Request Loan"><i class="fa fa-credit-card"></i></a> <a href="#" onclick="addDetails(${r.id})"><i class="fa fa-check text-success" aria-hidden="true"></i></a>`;
     },
     action_2(v, r, i) {
         return `<a href="#" onclick="editCapital(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'capital')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>`;

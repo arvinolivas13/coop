@@ -16,6 +16,7 @@ class LoanRequest extends Model
         'payment_frequency',
         'no_of_payment',
         'loan_amount',
+        'loan_date',
         'reference_name_1',
         'reference_phone_1',
         'reference_relationship_1',

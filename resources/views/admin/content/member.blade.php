@@ -664,7 +664,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group required">
-                            <label>Amount:</label>
+                            <label>Income Amount:</label>
                             <input type="number" class="form-control form-control-sm" id="income_amount" name="income_amount"/>
                         </div>
                     </div>
@@ -686,10 +686,16 @@
                             <input type="number" class="form-control form-control-sm" id="no_of_payment" name="no_of_payment"/>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group required">
-                            <label>Loan Amount:</label>
+                            <label>Requested Loan Amount:</label>
                             <input type="number" class="form-control form-control-sm" id="loan_amount" name="loan_amount" value="0"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group required">
+                            <label>Requested Date:</label>
+                            <input type="date" class="form-control form-control-sm" id="loan_date" name="loan_date" value="{{date('Y-m-d')}}"/>
                         </div>
                     </div>
                     <div class="col-md-12">

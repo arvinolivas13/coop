@@ -50,6 +50,7 @@ class LoanRequestController extends Controller
             'payment_frequency' => ['required'],
             'no_of_payment' => ['required'],
             'loan_amount' => ['required'],
+            'loan_date' => ['required'],
             'co_maker_id' => ['required']
         ]);
 
@@ -120,11 +121,11 @@ class LoanRequestController extends Controller
     }
 
     public function approve($id) {
-        $date = new DateTime('now', new DateTimeZone('Asia/Manila'));
-        $first = new DateTime('now', new DateTimeZone('Asia/Manila'));
-        $range = new DateTime('now', new DateTimeZone('Asia/Manila'));
-
         $request = LoanRequest::where('id', $id)->first();
+
+        $date = new DateTime($request->loan_date);
+        $first = new DateTime($request->loan_date);
+        $range = new DateTime($request->loan_date);
 
         $amount = floatval($request->loan_amount / $request->no_of_payment);
 
