@@ -296,7 +296,7 @@ function viewSchedule(id) {
                     <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.payment.penalty)}</td>
                     <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${v.payment.user.name}</td>
                     <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${v.payment.receipt_no}</td>
-                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.payment.loan_balance)}</td>
+                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.payment.loan_balance - v.payment.amount)}</td>
                 </tr>`
             }
         });
@@ -473,6 +473,67 @@ function removePurpose(id) {
     $.get(`/loan-request/destroy-purpose/${id}`, function() {
         $(`#existing_${id}`).remove();
     });
+}
+
+function selectFrequency() {
+    var frequency = $('#payment_frequency').val();
+
+    switch(frequency) {
+        case "monthly":
+            $('#no_of_payment').val(3);
+
+            break;
+            
+        case "semi_monthly":
+            $('#no_of_payment').val(6);
+
+            break;
+            
+        case "weekly":
+            $('#no_of_payment').val(14);
+
+            break;
+
+        case "daily":
+            $('#no_of_payment').val(90);
+
+            break;
+    }
+    countwithInterest();
+}
+
+function countwithInterest() {
+    var loan = parseFloat($('#loan_amount').val() !== ""?$('#loan_amount').val():0);
+    var interest_rate = 4;
+
+    var total = 0;
+    var frequency = $('#payment_frequency').val();
+    var ir = 0;
+
+    switch(frequency) {
+        case "monthly":
+            ir = (interest_rate/1) / 100;
+
+            break;
+            
+        case "semi_monthly":
+            ir = (interest_rate/2) / 100;
+
+            break;
+            
+        case "weekly":
+            ir = (interest_rate/4.33) / 100;
+
+            break;
+
+        case "daily":
+            ir = (interest_rate/30.44) / 100;
+
+            break;
+    }
+    total = (loan + (loan * ir) * parseFloat($('#no_of_payment').val()!==""?$('#no_of_payment').val():1));
+
+    $('#with_interest').val(total.toFixed(2));
 }
 
 var formatter = {

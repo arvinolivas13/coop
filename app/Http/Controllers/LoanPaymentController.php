@@ -33,4 +33,17 @@ class LoanPaymentController extends Controller
             'rows' => $rows
         ]);
     }
+    
+    public function edit($id)
+    {
+        $record = LoanPayment::with('user', 'schedule', 'member')->where('id', $id)->orderBy('id')->first();
+        return response()->json(compact('record'));
+    }
+    
+    public function update(Request $request, $id)
+    {
+        LoanPayment::find($id)->update($request->all());
+
+        return response()->json();
+    }
 }

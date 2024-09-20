@@ -665,6 +665,69 @@ function showMember() {
 }
 
 
+function selectFrequency() {
+    var frequency = $('#payment_frequency').val();
+
+    switch(frequency) {
+        case "monthly":
+            $('#no_of_payment').val(3);
+
+            break;
+            
+        case "semi_monthly":
+            $('#no_of_payment').val(6);
+
+            break;
+            
+        case "weekly":
+            $('#no_of_payment').val(14);
+
+            break;
+
+        case "daily":
+            $('#no_of_payment').val(90);
+
+            break;
+    }
+    countwithInterest();
+}
+
+
+function countwithInterest() {
+    var loan = parseFloat($('#loan_amount').val() !== ""?$('#loan_amount').val():0);
+    var interest_rate = 4;
+
+    var total = 0;
+    var frequency = $('#payment_frequency').val();
+    var ir = 0;
+
+    switch(frequency) {
+        case "monthly":
+            ir = (interest_rate/1) / 100;
+
+            break;
+            
+        case "semi_monthly":
+            ir = (interest_rate/2) / 100;
+
+            break;
+            
+        case "weekly":
+            ir = (interest_rate/4.33) / 100;
+
+            break;
+
+        case "daily":
+            ir = (interest_rate/30.44) / 100;
+
+            break;
+    }
+    total = (loan + (loan * ir) * parseFloat($('#no_of_payment').val()!==""?$('#no_of_payment').val():1));
+
+    $('#with_interest').val(total.toFixed(2));
+}
+
+
 var formatter = {
     account_number(v, r, i) {
         return formatNumber(r.id);

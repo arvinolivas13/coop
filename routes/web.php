@@ -77,6 +77,8 @@ Route::group(['prefix' => 'loan-schedule', 'middleware' => ['auth']], function (
 Route::group(['prefix' => 'loan-payment', 'middleware' => ['auth']], function (){
     Route::get          ('/',                            'LoanPaymentController@index'                      )->name('page');
     Route::get          ('/get',                         'LoanPaymentController@get'                        )->name('get');
+    Route::get          ('/edit/{id}',                   'LoanPaymentController@edit'                       )->name('edit');
+    Route::post         ('/update/{id}',                 'LoanPaymentController@update'                     )->name('update');
 });
 
 Route::group(['prefix' => 'reports', 'middleware' => ['auth']], function (){

@@ -334,7 +334,7 @@
                     <div class="col-md-6">
                         <div class="form-group required">
                             <label>Payment Frequency:</label>
-                            <select name="payment_frequency" id="payment_frequency" class="form-control form-control-sm">
+                            <select name="payment_frequency" id="payment_frequency" class="form-control form-control-sm" onchange="selectFrequency()">
                                 <option value=""></option>
                                 <option value="daily">DAILY</option>
                                 <option value="weekly">WEEKLY</option>
@@ -349,10 +349,16 @@
                             <input type="number" class="form-control form-control-sm" id="no_of_payment" name="no_of_payment"/>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <div class="form-group required">
                             <label>Requested Loan Amount:</label>
-                            <input type="number" class="form-control form-control-sm" id="loan_amount" name="loan_amount"/>
+                            <input type="number" class="form-control form-control-sm" id="loan_amount" name="loan_amount" oninput="countwithInterest()"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>with interest:</label>
+                            <input type="number" class="form-control form-control-sm" id="with_interest" name="with_interest" disabled/>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -1029,7 +1035,7 @@
                     <div class="col-md-6">
                         <div class="form-group required">
                             <label>Amount:</label>
-                            <input type="number" class="form-control form-control-sm" id="payment_amount" name="payment_amount" disabled/>
+                            <input type="number" class="form-control form-control-sm" id="payment_amount" name="payment_amount"/>
                         </div>
                     </div>
                     <div class="col-md-12">
