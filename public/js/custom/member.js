@@ -653,6 +653,8 @@ function onDblClickRow(row) {
 
 function showMember() {
     
+    $('#selectModal .search>input').val('');
+
     $.get(`/member/get-lookup`, {search: $('#selectModal .search>input').val(), id: record.id}, function(response) {
 
         $('#member_list').bootstrapTable('load', response.rows).off('dbl-click-row.bs.table').on('dbl-click-row.bs.table', function(e, row) {

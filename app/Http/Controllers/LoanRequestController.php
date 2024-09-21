@@ -23,18 +23,15 @@ class LoanRequestController extends Controller
 
     public function get(Request $request)
     {
-        $query = LoanRequest::with('member', 'comaker');
+        $query = LoanRequest::with('member', 'comaker')
+        ->join('members', 'loan_requests.member_id', '=', 'members.id');
 
-        // if ($search = $request->input('search')) {
-        //     $query->whereRaw("CONCAT(firstname, ' ', middlename, ' ', lastname) LIKE ?", ["%{$search}%"]);
-        //     $query->orWhereRaw("email_address LIKE ?", ["%{$search}%"]);
-        //     $query->orWhereRaw("mobile_no LIKE ?", ["%{$search}%"]);
-        //     $query->orWhereRaw("address LIKE ?", ["%{$search}%"]);
-        //     $query->orWhereRaw("status LIKE ?", ["%{$search}%"]);
-        // }
+        if ($search = $request->input('search')) {
+            $query->whereRaw("CONCAT(members.firstname, ' ', members.middlename, ' ', members.lastname) LIKE ?", ["%{$search}%"]);
+        }
         
         $total = $query->count();
-        $rows = $query->skip($request->input('offset'))->take($request->input('limit'))->get();
+        $rows = $query->select('loan_requests.*')->skip($request->input('offset'))->take($request->input('limit'))->get();
 
         return response()->json([
             'total' => $total,
@@ -169,8 +166,8 @@ class LoanRequestController extends Controller
                 break;
 
             case "daily":
-                $i_rate = ($ir / 30.44)/ 100;
-                $p_rate = (($pr / 30.44) / 100)/1;
+                $i_rate = ($ir / 30)/ 100;
+                $p_rate = (($pr / 30) / 100)/1;
 
                 $interval = "days";
                 $first = $first->modify("+1 " . $interval);

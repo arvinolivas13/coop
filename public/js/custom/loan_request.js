@@ -145,6 +145,8 @@ function onDblClickRow(row, type) {
 
 function showMember(type) {
     
+    $('#selectModal .search>input').val('');
+    
     $.get(`/member/get-lookup`, {search: $('#selectModal .search>input').val(), id: 0}, function(response) {
 
         $('#member_list').bootstrapTable('load', response.rows).off('dbl-click-row.bs.table').on('dbl-click-row.bs.table', function(e, row) {
@@ -490,7 +492,7 @@ function selectFrequency() {
             break;
             
         case "weekly":
-            $('#no_of_payment').val(14);
+            $('#no_of_payment').val(13);
 
             break;
 
@@ -527,10 +529,11 @@ function countwithInterest() {
             break;
 
         case "daily":
-            ir = (interest_rate/30.44) / 100;
+            ir = (interest_rate/30) / 100;
 
             break;
     }
+    console.log(ir);
     total = (loan + (loan * ir) * parseFloat($('#no_of_payment').val()!==""?$('#no_of_payment').val():1));
 
     $('#with_interest').val(total.toFixed(2));
