@@ -58,6 +58,12 @@
                 <div class="mb-3">Kindly provide the following details.</div>
 
                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group required">
+                            <label>Account Number:</label>
+                            <input type="number" class="form-control form-control-sm" id="acc_no" name="acc_no"/>
+                        </div>
+                    </div>
                     <div class="col-md-3">
                         <div class="form-group required">
                             <label>Lastname:</label>

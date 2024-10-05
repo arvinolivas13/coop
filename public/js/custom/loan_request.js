@@ -16,7 +16,7 @@ function print(id) {
         var v = response.record.member;
 
         $('.p_fullname').text(`${v.firstname} ${v.middlename} ${v.lastname}`);
-        $('.p_account_number').text(`${formatNumber(v.id)}`);
+        $('.p_account_number').text(`${v.acc_no !== null?formatNumber(v.acc_no):"-"}`);
         $('.p_address').text(`${v.address}`);
         $('.p_h_phone').text(`${v.contact_person_no}`);
         $('.p_o_phone').text(`${v.company_phone_no}`);
@@ -41,7 +41,7 @@ function print(id) {
         $('.p_reference_relationship_2').text(`${r.reference_relationship_2 !== null?r.reference_relationship_2:'-'}`);
 
         $('.c_fullname').text(c !== null? `${c.firstname} ${c.middlename} ${c.lastname}`:'-');
-        $('.c_account_number').text(c !== null? `${formatNumber(c.id)}`:'-');
+        $('.c_account_number').text(c !== null? `${c.acc_no !== null?formatNumber(c.acc_no):"-"}`:'-');
         $('.c_address').text(c !== null? `${c.address}`:'-');
         $('.c_h_phone').text(c !== null? `${c.contact_person_no}`:'-');
         $('.c_o_phone').text(c !== null? `${c.company_phone_no}`:'-');
@@ -241,7 +241,7 @@ function viewSchedule(id) {
         var payment = '';
         var total_loan_amount = (parseFloat(d.loan_amount) + parseFloat(d.total_interest));
 
-        $('#ld_account_no').text(formatNumber(d.member.id));
+        $('#ld_account_no').text(d.member.acc_no !== null?formatNumber(d.member.acc_no):"-");
         $('#ld_borrower').text(`${d.member.firstname} ${d.member.middlename} ${d.member.lastname}`);
         $('#ld_amount').text(currency(d.loan_amount));
         $('#ld_terms').text(d.schedule.length + "(" + d.loan.payment_frequency + ")");
@@ -264,7 +264,7 @@ function viewSchedule(id) {
         $('#br_processing_fee').text(currency(d.processing_fee));
         $('#br_take_home').text(currency(parseFloat(d.net_proceeds) - parseFloat(d.processing_fee)));
         
-        $('#lp_account_no').text(formatNumber(d.member.id));
+        $('#lp_account_no').text(d.member.acc_no !== null?formatNumber(d.member.acc_no):"-");
         $('#lp_borrower').text(`${d.member.firstname} ${d.member.middlename} ${d.member.lastname}`);
         $('#lp_amount').text(currency(d.loan_amount));
         $('#lp_terms').text(d.schedule.length + "(" + d.loan.payment_frequency + ")");
@@ -340,7 +340,7 @@ function viewPayment(id) {
         var total_loan_amount = (parseFloat(response.record.loan_amount) + parseFloat(response.record.total_interest));
         var balance = parseFloat(total_loan_amount) - parseFloat(response.total_payment);
 
-        $('#schd_account_no').text(formatNumber(response.record.member.id));
+        $('#schd_account_no').text(response.record.member.acc_no!==null?formatNumber(response.record.member.id):'-');
         $('#schd_account_name').text(`${response.record.member.firstname} ${response.record.member.middlename} ${response.record.member.lastname}`);
         $('#schd_loan_amount').text(currency(total_loan_amount));
         $('#schd_payment').text(currency(response.total_payment));
@@ -621,7 +621,7 @@ var formatter = {
         return currency((parseFloat(r.loan_amount) * (rate)) * n);
     },
     account_no(v, r, i) {
-        return formatNumber(r.member.id);
+        return r.member.acc_no !== null?formatNumber(r.member.acc_no):'-';
     },
     fullname(v, r, i) {
         return `${r.member.firstname} ${r.member.middlename} ${r.member.lastname}`;

@@ -18,7 +18,7 @@ function edit(id) {
                 $('#payment_date').val(v);
             }
             else if(i === "member") {
-                $('.member-acc-number-display').text(formatNumber(v.id));
+                $('.member-acc-number-display').text(v.acc_no!==null?formatNumber(v.acc_no):'-');
                 $('#member').val(v.firstname + " " + v.lastname);
                 $('#member_id').val(v.id);
             }
@@ -66,7 +66,7 @@ var formatter = {
         return `<a href="#" onclick="edit(${r.id})"><i class="fa fa-edit"></i></a>`;
     },
     account_number(v, r, i) {
-        return formatNumber(r.member_id);
+        return r.member.acc_no !== null?formatNumber(r.member.acc_no):'-';
     },
     fullname(v, r, i) {
         return `${r.member.firstname} ${r.member.middlename} ${r.member.lastname}`;

@@ -48,6 +48,7 @@ $(document).ready(function(){
 function saveRecord() {
     var data = {
         _token: $('meta[name="csrf-token"]').attr('content'),
+        acc_no: $('#acc_no').val(),
         firstname: $('#firstname').val(),
         middlename: $('#middlename').val(),
         lastname: $('#lastname').val(),
@@ -353,10 +354,10 @@ function memberType() {
 }
 
 // Loan
-function applyLoan(id, name, monthly) {
+function applyLoan(id, name, monthly, acc_no) {
     record.id = id;
 
-    $('#account_number').val(formatNumber(id));
+    $('#account_number').val(acc_no !== null?formatNumber(acc_no):'-');
     $('#account_name').val(name);
     $('#income_type').val('monthly');
     $('#income_amount').val(monthly);
@@ -381,7 +382,7 @@ function saveLoanRequest() {
         reference_name_2: $('#reference_name_2').val(),
         reference_phone_2: $('#reference_phone_2').val(),
         reference_relationship_2: $('#reference_relationship_2').val(),
-        co_maker_id: $('#co_maker_id').val(),
+        co_maker_id: $('#co_maker_id').val() !== "" && $('#co_maker_id').val() !== null?$('#co_maker_id').val():0,
         purpose: []
     };
     
@@ -460,7 +461,7 @@ function loadCapital() {
 
         $('#table_capital tbody').html(table);
         
-        $('#cap_account_no').text(formatNumber(record.id));
+        $('#cap_account_no').text(record.acc_no !== null?formatNumber(record.acc_no):'-');
         $('#cap_name').text(`${response.record.firstname} ${response.record.middlename} ${response.record.lastname}`);
         $('#cap_contact').text(`${response.record.mobile_no}`);
         $('#cap_address').text(`${response.record.address}`);
@@ -571,7 +572,7 @@ function loadSavings() {
 
         $('#table_savings tbody').html(table);
         
-        $('#sav_account_no').text(formatNumber(record.id));
+        $('#sav_account_no').text(record.acc_no !== null?formatNumber(record.acc_no):'-');
         $('#sav_name').text(`${response.record.firstname} ${response.record.middlename} ${response.record.lastname}`);
         $('#sav_contact').text(`${response.record.mobile_no}`);
         $('#sav_address').text(`${response.record.address}`);
@@ -645,7 +646,7 @@ function editSavings(id) {
 // Other
 
 function onDblClickRow(row) {
-    $('.acc-number-display').text(formatNumber(row.id));
+    $('.acc-number-display').text(row.acc_no !== null?formatNumber(row.acc_no):'-');
     $('#co_maker').val(`${row.firstname} ${row.middlename} ${row.lastname}`);
     $('#co_maker_id').val(row.id);
     $('#selectModal').modal('hide');
@@ -732,7 +733,7 @@ function countwithInterest() {
 
 var formatter = {
     account_number(v, r, i) {
-        return formatNumber(r.id);
+        return r.acc_no !== null ? formatNumber(r.acc_no):'-';
     },
     fullname(v, r, i) {
         return `${r.firstname} ${r.middlename} ${r.lastname}`;
@@ -795,7 +796,7 @@ var formatter = {
         return `<span class="btn btn-light btn-sm" style="font-weight: bold;">${currency(amount)}</span>`;
     },
     action(v, r, i) {
-        return `<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>  <a href="#" onclick="applyLoan(${r.id}, '${r.firstname} ${r.middlename} ${r.lastname}', '${r.monthly_income}')" class="text-primary" title="Request Loan"><i class="fa fa-credit-card"></i></a> <a href="#" onclick="addDetails(${r.id})"><i class="fa fa-check text-success" aria-hidden="true"></i></a>`;
+        return `<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>  <a href="#" onclick="applyLoan(${r.id}, '${r.firstname} ${r.middlename} ${r.lastname}', '${r.monthly_income}', ${r.acc_no},)" class="text-primary" title="Request Loan"><i class="fa fa-credit-card"></i></a> <a href="#" onclick="addDetails(${r.id})"><i class="fa fa-check text-success" aria-hidden="true"></i></a>`;
     },
     action_2(v, r, i) {
         return `<a href="#" onclick="editCapital(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'capital')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>`;

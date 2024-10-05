@@ -10,6 +10,7 @@ class Members extends Model
     use SoftDeletes;
     
     protected $fillable = [
+        'acc_no',
         'firstname',
         'middlename',
         'lastname',

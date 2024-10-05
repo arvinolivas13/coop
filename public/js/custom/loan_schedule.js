@@ -88,7 +88,7 @@ function pay(type) {
 
 var formatter = {
     account_number(v, r, i) {
-        return formatNumber(r.member_id);
+        return r.member.acc_no !== null ? formatNumber(r.member.acc_no):'-';
     },
     fullname(v, r, i) {
         return `${r.member.firstname} ${r.member.middlename} ${r.member.lastname}`;

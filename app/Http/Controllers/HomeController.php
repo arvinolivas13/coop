@@ -20,6 +20,8 @@ class HomeController extends Controller
     public function index()
     {
         $payment = LoanPayment::sum('amount');
+        $principal = LoanDetails::sum('loan_amount');
+        $interest = LoanDetails::sum('total_interest');
         $loan = LoanDetails::sum('loan_amount') + LoanDetails::sum('total_interest');
         $receivable = $loan - $payment;
         
@@ -33,10 +35,11 @@ class HomeController extends Controller
         $schedule = LoanSchedule::with('member')->where('status', 'draft')->orderBy('date','asc')->limit(10)->get();
 
         if($payment !== 0 || $loan !== 0) {
-            
             $percentage = [
                 "payment" => ($payment / $loan) * 100,
                 "receivable" => ($receivable / $loan) * 100,
+                "principal" => ($principal / $loan) * 100,
+                "interest" => ($interest / $loan) * 100,
             ];
         }
         else {
@@ -46,7 +49,7 @@ class HomeController extends Controller
             ];
         }
 
-        return view('admin.content.dashboard', compact('payment', 'loan', 'receivable', 'share_capital', 'savings', 'membership', 'processing_fee', 'schedule', 'total_fund', 'percentage'));
+        return view('admin.content.dashboard', compact('payment', 'loan', 'receivable', 'share_capital', 'savings', 'membership', 'processing_fee', 'schedule', 'total_fund', 'percentage', 'principal', 'interest'));
     }
 
 

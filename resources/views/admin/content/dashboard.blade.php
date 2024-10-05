@@ -3,7 +3,7 @@
 @section('content')
 <div class="analytics-sparkle-area">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30 bg-primary">
                     <div class="analytics-content">
@@ -23,7 +23,7 @@
                         <h2>₱ <span class="counter">{{number_format($loan, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
                         <span class="text-danger">100%</span>
                         <div class="progress m-b-0">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;"> <span class="sr-only">100% Complete</span> </div>
+                            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%;"> <span class="sr-only">100% Complete</span> </div>
                         </div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                         <h2>₱ <span class="counter">{{number_format($payment, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
                         <span class="text-danger">{{number_format($percentage['payment'], 2, '.', ',')}}%</span>
                         <div class="progress m-b-0">
-                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{$percentage['payment']}}%;"> <span class="sr-only">230% Complete</span> </div>
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{$percentage['payment']}}%;"> <span class="sr-only">230% Complete</span> </div>
                         </div>
                     </div>
                 </div>
@@ -48,6 +48,32 @@
                         <span class="text-inverse">{{number_format($percentage['receivable'], 2, '.', ',')}}%</span>
                         <div class="progress m-b-0">
                             <div class="progress-bar progress-bar-inverse" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:{{$percentage['receivable']}}%;"> <span class="sr-only">230% Complete</span> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30">
+                    <div class="analytics-content">
+                        <h5>Principal Amount</h5>
+                        <h2>₱ <span class="counter">{{number_format($principal, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
+                        <span class="text-danger">{{number_format($percentage['principal'], 2, '.', ',')}}%</span>
+                        <div class="progress m-b-0">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:{{$percentage['principal']}}%;"> <span class="sr-only">100% Complete</span> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30">
+                    <div class="analytics-content">
+                        <h5>Interest</h5>
+                        <h2>₱ <span class="counter">{{number_format($interest, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
+                        <span class="text-danger">{{number_format($percentage['interest'], 2, '.', ',')}}%</span>
+                        <div class="progress m-b-0">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:{{$percentage['interest']}}%;"> <span class="sr-only">100% Complete</span> </div>
                         </div>
                     </div>
                 </div>
