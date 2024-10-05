@@ -1093,8 +1093,8 @@
                         <table id="editable_schedule">
                             <thead>
                                 <th>DATE</th>
-                                <th>PRINCIPAL</th>
-                                <th>INTEREST</th>
+                                <th>PRINCIPAL <a href="#" onclick="applyAll(1)">Apply All</a></th>
+                                <th>INTEREST <a href="#" onclick="applyAll(2)">Apply All</a></th>
                                 <th>TOTAL</th>
                             </thead>
                             <tbody></tbody>

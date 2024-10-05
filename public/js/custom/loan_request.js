@@ -592,6 +592,19 @@ function saveEdit() {
     
 }
 
+function applyAll(n) {
+
+    if(n === 1) {
+        var v = $('#field_0 .edit-principal').val();
+        $('.edit-principal').val(v);
+    }
+    else if(n === 2) {
+        var v = $('#field_0 .edit-interest').val();
+        $('.edit-interest').val(v);
+    }
+    
+}
+
 var formatter = {
     account_number(v, r, i) {
         return formatNumber(r.id);
