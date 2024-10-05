@@ -133,6 +133,16 @@ class LoanRequestController extends Controller
         $interval = "";
         $dt_i = "";
 
+        $penalty = 0;
+        $interest_in = 0;
+        $partial_in = 0;
+        $total_partial = 0;
+        $total_interest = 0;
+        $last_partial = 0;
+        $last_interest = 0;
+        $penalty_2 = 0;
+        $months = null;
+
         switch($request->payment_frequency) {
             case "monthly":
                 $i_rate = ($ir / 1) / 100;
@@ -156,12 +166,26 @@ class LoanRequestController extends Controller
                 break;
 
             case "weekly":
-                $i_rate = ($ir / 4.33)/ 100;
-                $p_rate = (($pr / 4.33) / 100)/7;
+                // loan * interest_rate * no_month / no_of_days * 7
+                $months = round($request->no_of_payment / 4.345);
+
+                $interest_in = ((($request->loan_amount * ($ir / 100)) * $months) / ($months * 30)) * 7;
+                $partial_in = ($request->loan_amount/($months * 30)) * 7;
+
+                $penalty_2 = ($interest_in + $partial_in) * ($pr / 100) / 30;
+
+                $total_partial_2 = $partial_in * ($request->no_of_payment - 1);
+                $total_interest_2 = $interest_in * ($request->no_of_payment - 1);
+
+                $last_partial = $request->loan_amount - $total_partial_2;
+                $last_interest = ($request->loan_amount * ($ir / 100) * $months) - $total_interest_2;
+
+                // $i_rate = ($ir / 4.33)/ 100;
+                // $p_rate = (($pr / 4.33) / 100)/7;
 
                 $interval = "weeks";
                 $first = $first->modify("+1 " . $interval);
-                $range = $range->modify("+" . $request->no_of_payment . " " . $interval);
+                $range = $range->modify("+" . ($request->no_of_payment - 1) . " " . $interval);
                 $dt_i = "P1W";
                 break;
 
@@ -195,10 +219,10 @@ class LoanRequestController extends Controller
             "first_payment" => $first->format('Y-m-d'),
             "due_date" => $endDate->format('Y-m-d'),
             "loan_amount" => $request->loan_amount,
-            "total_interest" => floatval($total_interest),
+            "total_interest" => $request->payment_frequency !== "weekly"?floatval($total_interest):floatval($total_interest_2 + $last_interest),
             "net_proceeds" => floatval($request->loan_amount),
-            "weekly_payment" => floatval($payment),
-            "penalty_amount" => $penalty,
+            "weekly_payment" => $request->payment_frequency !== "weekly"?floatval($payment):floatval(($total_partial_2 + $last_partial) + ($total_interest_2 + $last_interest)),
+            "penalty_amount" => $request->payment_frequency !== "weekly"?$penalty:$penalty_2,
             "processing_fee" => 200,
             "created_by" => Auth::user()->id,
             "updated_by" => Auth::user()->id,
@@ -211,9 +235,9 @@ class LoanRequestController extends Controller
                 "member_id" => $request->member_id,
                 "loan_details_id" => $details->id,
                 "date" => $currentDate->format('Y-m-d'),
-                "principal_amount" => $amount,
-                "interest_amount" => $interest,
-                "amount" => $payment,
+                "principal_amount" => $request->payment_frequency !== "weekly"?$amount:$partial_in,
+                "interest_amount" => $request->payment_frequency !== "weekly"?$interest:$interest_in,
+                "amount" => $request->payment_frequency !== "weekly"?$payment:($partial_in + $interest_in),
                 "approved_by" => null,
                 "approved_date" => null,
                 "status" => "draft",
@@ -224,10 +248,26 @@ class LoanRequestController extends Controller
             $currentDate->add($interval_2);
         }
 
+        if($request->payment_frequency === "weekly") {
+            $data = array(
+                "member_id" => $request->member_id,
+                "loan_details_id" => $details->id,
+                "date" => $currentDate->format('Y-m-d'),
+                "principal_amount" => $last_partial,
+                "interest_amount" => $last_interest,
+                "amount" => $last_partial + $last_interest,
+                "approved_by" => null,
+                "approved_date" => null,
+                "status" => "draft",
+            );
+
+            LoanSchedule::create($data);
+        }
+
         LoanRequest::where('id', $id)->update(['status' => 'approve', 'approved_by' => Auth::user()->id, 'approved_date' => date('Y-m-d')]);
         
 
-        return response()->json(compact('date', 'range'));
+        return response()->json(compact('date', 'range', 'months'));
     }
     
     public function decline($id) {

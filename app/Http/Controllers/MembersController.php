@@ -24,6 +24,7 @@ class MembersController extends Controller
 
         if ($search = $request->input('search')) {
             $query->whereRaw("CONCAT(firstname, ' ', middlename, ' ', lastname) LIKE ?", ["%{$search}%"]);
+            $query->orWhereRaw("acc_no LIKE ?", ["%{$search}%"]);
             $query->orWhereRaw("email_address LIKE ?", ["%{$search}%"]);
             $query->orWhereRaw("mobile_no LIKE ?", ["%{$search}%"]);
             $query->orWhereRaw("address LIKE ?", ["%{$search}%"]);
