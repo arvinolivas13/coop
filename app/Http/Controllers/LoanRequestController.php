@@ -325,4 +325,25 @@ class LoanRequestController extends Controller
 
         return response()->json(compact('total_payment'));
     }
+
+    public function saveEdit(Request $request) {
+    
+        foreach($request->sched as $item) {
+            LoanSchedule::where('id', $item['id'])->update([
+                'date' => $item['date'],
+                'principal_amount' => $item['principal_amount'],
+                'interest_amount' => $item['interest_amount'],
+                'amount' => floatval($item['principal_amount'] + $item['interest_amount'])
+            ]);
+        }
+
+        $interest = round(LoanSchedule::where('loan_details_id', $request->id)->sum('interest_amount'));
+        $payment = LoanSchedule::where('loan_details_id', $request->id)->orderBy('id', 'asc')->first();
+
+        LoanDetails::where('id', $request->id)->update([
+            'weekly_payment' => $payment->amount,
+            'total_interest' => $interest
+        ]);
+    }
+
 }

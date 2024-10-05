@@ -5,6 +5,7 @@ var record = {
 
 var selected_request = null;
 var schedule_id = null;
+var detail_id = null
 
 function print(id) {
     var html = '';
@@ -39,17 +40,17 @@ function print(id) {
         $('.p_reference_no_2').text(`${r.reference_phone_2 !== null?r.reference_phone_2:'-'}`);
         $('.p_reference_relationship_2').text(`${r.reference_relationship_2 !== null?r.reference_relationship_2:'-'}`);
 
-        $('.c_fullname').text(`${c.firstname} ${c.middlename} ${c.lastname}`);
-        $('.c_account_number').text(`${formatNumber(c.id)}`);
-        $('.c_address').text(`${c.address}`);
-        $('.c_h_phone').text(`${c.contact_person_no}`);
-        $('.c_o_phone').text(`${c.company_phone_no}`);
-        $('.c_mobile').text(`${c.mobile_no}`);
-        $('.c_occupation').text(`${c.occupation}`);
-        $('.c_company_address').text(`${c.company_address}`);
-        $('.c_spouse').text(`${c.spouse!==null?c.spouse:'-'}`);
-        $('.c_spouse_occupation').text(`${c.spouse_occupation!==null?c.spouse_occupation:'-'}`);
-        $('.c_no_children').text(`${c.no_children}`);
+        $('.c_fullname').text(c !== null? `${c.firstname} ${c.middlename} ${c.lastname}`:'-');
+        $('.c_account_number').text(c !== null? `${formatNumber(c.id)}`:'-');
+        $('.c_address').text(c !== null? `${c.address}`:'-');
+        $('.c_h_phone').text(c !== null? `${c.contact_person_no}`:'-');
+        $('.c_o_phone').text(c !== null? `${c.company_phone_no}`:'-');
+        $('.c_mobile').text(c !== null? `${c.mobile_no}`:'-');
+        $('.c_occupation').text(c !== null? `${c.occupation}`:'-');
+        $('.c_company_address').text(c !== null? `${c.company_address}`:'-');
+        $('.c_spouse').text(c !== null? `${c.spouse!==null?c.spouse:'-'}`:'-');
+        $('.c_spouse_occupation').text(c !== null? `${c.spouse_occupation!==null?c.spouse_occupation:'-'}`:'-');
+        $('.c_no_children').text(c !== null? `${c.no_children}`:'-');
 
         $.each(response.record.details, (i,val) => {
             html += `<div style="display:flex;">`;
@@ -174,7 +175,7 @@ function saveLoanRequest() {
         reference_name_2: $('#reference_name_2').val(),
         reference_phone_2: $('#reference_phone_2').val(),
         reference_relationship_2: $('#reference_relationship_2').val(),
-        co_maker_id: $('#co_maker_id').val(),
+        co_maker_id: $('#co_maker_id').val() !== "" && $('#co_maker_id').val() !== null?$('#co_maker_id').val():0,
         purpose: []
     };
     
@@ -331,6 +332,7 @@ function viewSchedule(id) {
 }
 
 function viewPayment(id) {
+    detail_id = id;
     
     $.get(`/loan-request/get-details/${id}`,function(response) {
         selected_request = response.record;
@@ -539,6 +541,57 @@ function countwithInterest() {
     $('#with_interest').val(total.toFixed(2));
 }
 
+function editSched() {
+    var html = '';
+    $.each(selected_request.schedule, (i,v) => {
+        html += `<tr id="field_${i}" data-id="${v.id}">
+            <td><input type="date" class="form-control edit-date" value="${v.date}" ${v.status !== "draft"?"disabled":""}/></td>
+            <td><input type="number" class="form-control edit-principal" oninput="inputUpdate(${i})" value="${parseFloat(v.principal_amount).toFixed(2)}" ${v.status !== "draft"?"disabled":""}/></td>
+            <td><input type="number" class="form-control edit-interest" oninput="inputUpdate(${i})" value="${parseFloat(v.interest_amount).toFixed(2)}" ${v.status !== "draft"?"disabled":""}/></td>
+            <td><input type="number" class="form-control edit-total" value="${parseFloat(v.amount).toFixed(2)}" disabled/></td>
+        </tr>`;
+    });
+    $('#editable_schedule tbody').html(html);
+
+    $('#editLoanModal').modal('show');
+}
+
+function inputUpdate(i) {
+    var principal = parseFloat($(`#field_${i} .edit-principal`).val());
+    var interest = parseFloat($(`#field_${i} .edit-interest`).val());
+    var total = parseFloat(principal + interest).toFixed(2);
+
+    $(`#field_${i} .edit-total`).val(total);
+}
+
+function saveEdit() {
+    var data = {
+        _token: $('meta[name="csrf-token"]').attr('content'),
+        id: detail_id,
+        sched: []
+    };
+
+    $.each($('#editable_schedule tbody tr'), (i,v) => {
+        var id = v.id;
+
+        data.sched.push({
+            id: $(`#${id}`).attr('data-id'),
+            date: $(`#${id} .edit-date`).val(),
+            principal_amount: $(`#${id} .edit-principal`).val(),
+            interest_amount: $(`#${id} .edit-interest`).val(),
+            amount: $(`#${id} .edit-total`).val()
+        });
+    });
+    console.log(data);
+
+    $.post('/loan-schedule/edit', data).done(function(response) {
+        
+        $('#editLoanModal').modal('hide');
+        viewPayment(detail_id);
+    });
+    
+}
+
 var formatter = {
     account_number(v, r, i) {
         return formatNumber(r.id);
@@ -577,7 +630,7 @@ var formatter = {
         return `${r.firstname} ${r.middlename} ${r.lastname}`;
     },
     comaker(v, r, i) {
-        return `${r.comaker.firstname} ${r.comaker.middlename} ${r.comaker.lastname}`;
+        return r.comaker !== null?`${r.comaker.firstname} ${r.comaker.middlename} ${r.comaker.lastname}`:'-';
     },
     loan_amount(v, r, i) {
         return currency(r.loan_amount);

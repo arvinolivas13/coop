@@ -48,3 +48,14 @@ span.status-release {
 .purpose_amount {
     padding: 5px 15px;
 }
+
+table#editable_schedule {
+    width: 100%;
+    font-size: 12px;
+}
+
+table#editable_schedule input {
+    font-size: 12px;
+    padding: 5px;
+    height: 30px;
+}

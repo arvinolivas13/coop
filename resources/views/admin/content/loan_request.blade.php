@@ -975,10 +975,16 @@
             <div class="modal-body">
                 <h2>SCHEDULE OF PAYMENT</h2>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <h5>ACCOUNT #: <span id="schd_account_no"></span></h5>
                         <h5>NAME: <span id="schd_account_name"></span></h5>
                     </div>
+                    
+                    <div class="col-md-4 text-right">
+                        <button class="btn btn-sm btn-primary" onclick="editSched()">EDIT</button>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-4">
                         <div class="card-content">
                             <div class="card-title">TOTAL LOAN AMOUNT</div>
@@ -1067,6 +1073,37 @@
             <div class="modal-footer">
                 <button class="btn btn-danger btn-no-penalty" onclick="pay(0)">PAY WITHOUT PENALTY</button>
                 <button class="btn btn-primary btn-penalty" onclick="pay(1)">PAY WITH PENALTY</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editLoanModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h5>Edit Schedule</h5>
+            </div>
+            <div class="modal-close-area modal-close-df">
+                <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="editable_schedule">
+                            <thead>
+                                <th>DATE</th>
+                                <th>PRINCIPAL</th>
+                                <th>INTEREST</th>
+                                <th>TOTAL</th>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="saveEdit()">SAVE</button>
             </div>
         </div>
     </div>

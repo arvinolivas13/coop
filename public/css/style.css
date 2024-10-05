@@ -4783,3 +4783,14 @@ div#sparklinehome canvas {
     background: #006c14 !important;;
     font-size: 15px !important;;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
