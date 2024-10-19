@@ -15,18 +15,15 @@ class LoanScheduleController extends Controller
 
     public function get(Request $request)
     {
-        $query = LoanSchedule::with('member')->where('status', 'draft')->orderBy('date','asc');
+        $query = LoanSchedule::with('member')
+        ->join('members', 'loan_schedules.member_id', '=', 'members.id')->where('loan_schedules.status', 'draft')->orderBy('loan_schedules.date','asc');
 
-        // if ($search = $request->input('search')) {
-        //     $query->whereRaw("CONCAT(firstname, ' ', middlename, ' ', lastname) LIKE ?", ["%{$search}%"]);
-        //     $query->orWhereRaw("email_address LIKE ?", ["%{$search}%"]);
-        //     $query->orWhereRaw("mobile_no LIKE ?", ["%{$search}%"]);
-        //     $query->orWhereRaw("address LIKE ?", ["%{$search}%"]);
-        //     $query->orWhereRaw("status LIKE ?", ["%{$search}%"]);
-        // }
+        if ($search = $request->input('search')) {
+            $query->whereRaw("CONCAT(members.firstname, ' ', members.middlename, ' ', members.lastname) LIKE ?", ["%{$search}%"]);
+        }
         
         $total = $query->count();
-        $rows = $query->skip($request->input('offset'))->take($request->input('limit'))->get();
+        $rows = $query->select('loan_schedules.*')->skip($request->input('offset'))->take($request->input('limit'))->get();
 
         return response()->json([
             'total' => $total,

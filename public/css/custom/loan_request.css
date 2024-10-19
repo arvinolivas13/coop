@@ -59,3 +59,7 @@ table#editable_schedule input {
     padding: 5px;
     height: 30px;
 }
+
+#chart_btn {
+    display: none;
+}

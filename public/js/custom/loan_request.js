@@ -495,6 +495,7 @@ function selectFrequency() {
             
         case "weekly":
             $('#no_of_payment').val(13);
+            $('#chart_btn').css('display', 'table-cell');
 
             break;
 
@@ -514,6 +515,8 @@ function countwithInterest() {
     var frequency = $('#payment_frequency').val();
     var ir = 0;
 
+    var noOfPayments = parseFloat($('#no_of_payment').val());
+
     switch(frequency) {
         case "monthly":
             ir = (interest_rate/1) / 100;
@@ -526,7 +529,13 @@ function countwithInterest() {
             break;
             
         case "weekly":
-            ir = (interest_rate/4.33) / 100;
+            var months = Math.round(noOfPayments / 4.345);
+            
+            var interestPerWeek = (((loan * (interest_rate / 100)) * months) / (months * 30)) * 7;
+            var totalInterest = interestPerWeek * (noOfPayments - 1);
+            var lastInterest = (loan * (interest_rate / 100) * months) - totalInterest;
+
+            ir = (totalInterest + lastInterest)
 
             break;
 
@@ -535,8 +544,7 @@ function countwithInterest() {
 
             break;
     }
-    console.log(ir);
-    total = (loan + (loan * ir) * parseFloat($('#no_of_payment').val()!==""?$('#no_of_payment').val():1));
+    total = frequency !== "weekly"?(loan + (loan * ir) * parseFloat($('#no_of_payment').val()!==""?$('#no_of_payment').val():1)):(loan + ir);
 
     $('#with_interest').val(total.toFixed(2));
 }
@@ -582,10 +590,8 @@ function saveEdit() {
             amount: $(`#${id} .edit-total`).val()
         });
     });
-    console.log(data);
 
     $.post('/loan-schedule/edit', data).done(function(response) {
-        
         $('#editLoanModal').modal('hide');
         viewPayment(detail_id);
     });
@@ -605,6 +611,28 @@ function applyAll(n) {
     
 }
 
+function viewChart() {
+    $('#convert_month').val(0);
+    $('#convert_week').val(0);
+    $('#viewChartModal').modal('show');
+}
+
+function convertMonth() {
+    var months = parseInt($('#convert_month').val());
+
+    if (!isNaN(months) && months > 0) {
+        var weeks = months * 4.35;
+        $('#convert_week').val(Math.round(weeks.toFixed(2)));
+    } else {
+        $('#convert_week').val(0);
+    }
+}
+
+function useConvert() {
+    $('#no_of_payment').val($('#convert_week').val());
+    $('#viewChartModal').modal('hide');
+}
+
 var formatter = {
     account_number(v, r, i) {
         return formatNumber(r.id);
@@ -612,6 +640,7 @@ var formatter = {
     interest(v, r, i) {
         var n = parseFloat(r.no_of_payment);
         var f = r.payment_frequency;
+        var l = parseFloat(r.loan_amount);
 
         var ir = 4; 
         var rate = 0;
@@ -624,14 +653,24 @@ var formatter = {
                 rate = (ir / 2)/ 100;
                 break;
             case "weekly":
-                rate = (ir / 4.33)/ 100;
+                // rate = (ir / 4.33)/ 100;
+                
+                var months = Math.round(n / 4.345);
+                
+                var interestPerWeek = (((l * (ir / 100)) * months) / (months * 30)) * 7;
+                var totalInterest = interestPerWeek * (n - 1);
+                var lastInterest = (l * (ir / 100) * months) - totalInterest;
+
+                rate = (totalInterest + lastInterest);
+                console.log(rate);
+
                 break;
             case "daily":
                 rate = (ir / 30.44)/ 100;
                 break;
         }
         
-        return currency((parseFloat(r.loan_amount) * (rate)) * n);
+        return currency(f !== "weekly"?((parseFloat(r.loan_amount) * (rate)) * n):rate);
     },
     account_no(v, r, i) {
         return r.member.acc_no !== null?formatNumber(r.member.acc_no):'-';

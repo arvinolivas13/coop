@@ -84,7 +84,26 @@ Route::group(['prefix' => 'loan-payment', 'middleware' => ['auth']], function ()
 
 Route::group(['prefix' => 'reports', 'middleware' => ['auth']], function (){
     Route::group(['prefix' => 'transaction', 'middleware' => ['auth']], function (){
-        Route::get          ('/',                            'TransactionController@index'                      )->name('page');
-        Route::get          ('/get',                         'TransactionController@get'                        )->name('get');
+        Route::get          ('/',                            'TransactionController@index'                  )->name('page');
+        Route::get          ('/get',                         'TransactionController@get'                    )->name('get');
+    });
+});
+
+Route::group(['prefix' => 'setup', 'middleware' => ['auth']], function (){
+    Route::group(['prefix' => 'user', 'middleware' => ['auth']], function (){
+        Route::get          ('/',                            'UserController@index'                         )->name('page');
+        Route::get          ('/get',                         'UserController@get'                           )->name('get');
+        Route::post         ('/save',                        'UserController@save'                          )->name('save');
+        Route::get          ('/edit/{id}',                   'UserController@edit'                          )->name('edit');
+        Route::post         ('/update/{id}',                 'UserController@update'                        )->name('update');
+        Route::get          ('/destroy/{id}',                'UserController@destroy'                       )->name('destroy');
+    });
+    Route::group(['prefix' => 'role', 'middleware' => ['auth']], function (){
+        Route::get          ('/',                            'RoleController@index'                         )->name('page');
+        Route::get          ('/get',                         'RoleController@get'                           )->name('get');
+        Route::post         ('/save',                        'RoleController@save'                          )->name('save');
+        Route::get          ('/edit/{id}',                   'RoleController@edit'                          )->name('edit');
+        Route::post         ('/update/{id}',                 'RoleController@update'                        )->name('update');
+        Route::get          ('/destroy/{id}',                'RoleController@destroy'                       )->name('destroy');
     });
 });

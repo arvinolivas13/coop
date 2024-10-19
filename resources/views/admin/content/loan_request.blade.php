@@ -317,7 +317,7 @@
                     <div class="col-md-6">
                         <div class="form-group required">
                             <label>Income Type:</label>
-                            <select name="income_type" id="income_type" class="form-control form-control-sm">
+                            <select name="income_type" id="income_type" class="form-control form-control-sm" disabled>
                                 <option value=""></option>
                                 <option value="daily">DAILY</option>
                                 <option value="weekly">WEEKLY</option>
@@ -328,7 +328,7 @@
                     <div class="col-md-6">
                         <div class="form-group required">
                             <label>Income Amount:</label>
-                            <input type="number" class="form-control form-control-sm" id="income_amount" name="income_amount"/>
+                            <input type="number" class="form-control form-control-sm" id="income_amount" name="income_amount" disabled/>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -346,7 +346,10 @@
                     <div class="col-md-6">
                         <div class="form-group required">
                             <label>No. of Payment:</label>
-                            <input type="number" class="form-control form-control-sm" id="no_of_payment" name="no_of_payment"/>
+                            <div class="input-group" style="width: 100%;">
+                                <input type="number" class="form-control form-control-sm" id="no_of_payment" name="no_of_payment"/>
+                                <span class="input-group-addon" style="cursor:pointer;" id="chart_btn" onclick="viewChart()"><i class="fa fa-table"></i></span>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -1104,6 +1107,32 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" onclick="saveEdit()">SAVE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="viewChartModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h5>Convert</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Month</label>
+                        <input type="number" class="form-control" name="convert_month" id="convert_month" oninput="convertMonth()" value="0"/>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Weeks</label>
+                        <input type="number" class="form-control" name="convert_week" id="convert_week" value="0" disabled/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" data-dismiss="modal" >Cancel</button>
+                <button class="btn btn-primary" onclick="useConvert()">Use</button>
             </div>
         </div>
     </div>

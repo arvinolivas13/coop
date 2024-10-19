@@ -40,3 +40,7 @@ span#cap_account_no {
 .body-print, .header-print {
     display: none;
 }
+
+#chart_btn {
+    display: none;
+}

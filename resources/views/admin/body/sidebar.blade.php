@@ -52,10 +52,10 @@
                         </a>
                         <ul class="submenu-angle" aria-expanded="false">
                             <li>
-                                <a title="Transaction" href="{{url('/reports/transaction')}}"><span class="mini-sub-pro">Account</span></a>
+                                <a title="Transaction" href="{{url('/setup/user')}}"><span class="mini-sub-pro">Account</span></a>
                             </li>
                             <li>
-                                <a title="Transaction" href="{{url('/reports/transaction')}}"><span class="mini-sub-pro">Role</span></a>
+                                <a title="Transaction" href="{{url('/setup/role')}}"><span class="mini-sub-pro">Role</span></a>
                             </li>
                         </ul>
                     </li>

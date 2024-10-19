@@ -340,7 +340,6 @@ function saveDetails() {
     $.post('/member/save-details', data).done((response)=>{
         $('#memberDetailsModal').modal('hide');
     }).fail((response)=>{
-        console.log(response);
     });
 }
 
@@ -683,7 +682,8 @@ function selectFrequency() {
             break;
             
         case "weekly":
-            $('#no_of_payment').val(14);
+            $('#no_of_payment').val(13);
+            $('#chart_btn').css('display', 'table-cell');
 
             break;
 
@@ -696,6 +696,7 @@ function selectFrequency() {
 }
 
 
+
 function countwithInterest() {
     var loan = parseFloat($('#loan_amount').val() !== ""?$('#loan_amount').val():0);
     var interest_rate = 4;
@@ -703,6 +704,8 @@ function countwithInterest() {
     var total = 0;
     var frequency = $('#payment_frequency').val();
     var ir = 0;
+
+    var noOfPayments = parseFloat($('#no_of_payment').val());
 
     switch(frequency) {
         case "monthly":
@@ -716,18 +719,46 @@ function countwithInterest() {
             break;
             
         case "weekly":
-            ir = (interest_rate/4.33) / 100;
+            var months = Math.round(noOfPayments / 4.345);
+            
+            var interestPerWeek = (((loan * (interest_rate / 100)) * months) / (months * 30)) * 7;
+            var totalInterest = interestPerWeek * (noOfPayments - 1);
+            var lastInterest = (loan * (interest_rate / 100) * months) - totalInterest;
+
+            ir = (totalInterest + lastInterest)
 
             break;
 
         case "daily":
-            ir = (interest_rate/30.44) / 100;
+            ir = (interest_rate/30) / 100;
 
             break;
     }
-    total = (loan + (loan * ir) * parseFloat($('#no_of_payment').val()!==""?$('#no_of_payment').val():1));
+    total = frequency !== "weekly"?(loan + (loan * ir) * parseFloat($('#no_of_payment').val()!==""?$('#no_of_payment').val():1)):(loan + ir);
 
     $('#with_interest').val(total.toFixed(2));
+}
+
+function viewChart() {
+    $('#convert_month').val(0);
+    $('#convert_week').val(0);
+    $('#viewChartModal').modal('show');
+}
+
+function convertMonth() {
+    var months = parseInt($('#convert_month').val());
+
+    if (!isNaN(months) && months > 0) {
+        var weeks = months * 4.35;
+        $('#convert_week').val(Math.round(weeks.toFixed(2)));
+    } else {
+        $('#convert_week').val(0);
+    }
+}
+
+function useConvert() {
+    $('#no_of_payment').val($('#convert_week').val());
+    $('#viewChartModal').modal('hide');
 }
 
 
