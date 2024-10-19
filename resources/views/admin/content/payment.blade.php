@@ -21,6 +21,7 @@
                                         <th data-field="account_number" data-formatter="formatter.account_number">Acc. #</th>
                                         <th data-field="fullname" data-formatter="formatter.fullname">Full Name</th>
                                         <th data-field="loan_amount" data-formatter="formatter.amount">Amount</th>
+                                        <th data-field="penalty">Penalty</th>
                                         <th data-field="receipt_no">Receipt No.</th>
                                         <th data-field="date" data-formatter="formatter.date">Due Date</th>
                                         <th data-field="received" data-formatter="formatter.received_by">Received By</th>
@@ -82,7 +83,7 @@
                     <div class="col-md-12">
                         <div class="form-group required">
                             <label>Penalty:</label>
-                            <input type="number" class="form-control form-control-sm" id="penalty" name="penalty" value="0" disabled/>
+                            <input type="number" class="form-control form-control-sm" id="penalty" name="penalty" value="0"/>
                         </div>
                     </div>
                     <div class="col-md-12">

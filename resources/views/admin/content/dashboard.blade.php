@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30">
                     <div class="analytics-content">
                         <h5>Principal Amount</h5>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30">
                     <div class="analytics-content">
                         <h5>Interest</h5>
@@ -74,6 +74,18 @@
                         <span class="text-danger">{{number_format($percentage['interest'], 2, '.', ',')}}%</span>
                         <div class="progress m-b-0">
                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:{{$percentage['interest']}}%;"> <span class="sr-only">100% Complete</span> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30">
+                    <div class="analytics-content">
+                        <h5>Penalty</h5>
+                        <h2>₱ <span class="counter">{{number_format($penalty, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
+                        <span class="text-danger">{{number_format($percentage['penalty'], 2, '.', ',')}}%</span>
+                        <div class="progress m-b-0">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:{{$percentage['penalty']}}%;"> <span class="sr-only">100% Complete</span> </div>
                         </div>
                     </div>
                 </div>
@@ -89,7 +101,8 @@
                     <div class="analytics-content">
                         <h5>Loan Schedule</h5>
                         <div class="schedule-list">
-                            @foreach ($schedule as $item)
+                            @if (count($schedule) !== 0)
+                                @foreach ($schedule as $item)
                                 <div class="schedule-item">
                                     <div class="row">
                                         <div class="col-md-8">
@@ -99,7 +112,16 @@
                                         <div class="col-md-12"><span class="member-date">{{$item->date}}</span></div>
                                     </div>
                                 </div>
-                            @endforeach
+                                @endforeach
+                            @else
+                            <div class="schedule-item">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        No Records Found
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                         <a class="btn text-center" style="width:100%;" href="/loan-schedule">View Loan Schedule</a>
                     </div>

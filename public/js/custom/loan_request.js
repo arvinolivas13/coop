@@ -399,6 +399,10 @@ function checkInterestRate(date_1, date_2) {
     $('#payment_total').val(parseFloat($('#payment_amount').val()) + parseFloat($('#penalty').val()));
 }
 
+function checkInterestRate2(date_1, date_2) {
+    $('#payment_total').val(parseFloat($('#payment_amount').val()) + parseFloat($('#penalty').val()));
+}
+
 function pay(type) {
     var data = {};
     if(type === 0) {

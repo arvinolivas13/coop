@@ -1044,7 +1044,7 @@
                     <div class="col-md-6">
                         <div class="form-group required">
                             <label>Amount:</label>
-                            <input type="number" class="form-control form-control-sm" id="payment_amount" name="payment_amount"/>
+                            <input type="number" class="form-control form-control-sm" id="payment_amount" name="payment_amount" oninput="checkInterestRate($('#payment_date').val(), $('#schedule_date').val())"/>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -1062,7 +1062,7 @@
                     <div class="col-md-12">
                         <div class="form-group required">
                             <label>Penalty:</label>
-                            <input type="number" class="form-control form-control-sm" id="penalty" name="penalty" value="0" disabled/>
+                            <input type="number" class="form-control form-control-sm" id="penalty" name="penalty" value="0" oninput="checkInterestRate2($('#payment_date').val(), $('#schedule_date').val())"/>
                         </div>
                     </div>
                     <div class="col-md-12">
