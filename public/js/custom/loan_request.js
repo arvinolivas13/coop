@@ -3,6 +3,7 @@ var record = {
     action: 'save'
 };
 
+var s = 0;
 var selected_request = null;
 var schedule_id = null;
 var detail_id = null
@@ -245,6 +246,7 @@ function viewSchedule(id) {
         var total_loan_amount = (parseFloat(d.loan_amount) + parseFloat(d.total_interest));
 
         total_loan = total_loan_amount;
+        s = 0;
 
         $('#ld_account_no').text(d.member.acc_no !== null?formatNumber(d.member.acc_no):"-");
         $('#ld_borrower').text(`${d.member.firstname} ${d.member.middlename} ${d.member.lastname}`);
@@ -347,6 +349,7 @@ function viewPayment(id) {
         var balance = parseFloat(total_loan_amount) - parseFloat(response.total_payment);
 
         total_loan = total_loan_amount;
+        s = 0;
 
         $('#schd_account_no').text(response.record.member.acc_no!==null?formatNumber(response.record.member.id):'-');
         $('#schd_account_name').text(`${response.record.member.firstname} ${response.record.member.middlename} ${response.record.member.lastname}`);
@@ -654,7 +657,6 @@ function useConvert() {
 }
 
 
-var s = 0;
 
 var formatter = {
     account_number(v, r, i) {
