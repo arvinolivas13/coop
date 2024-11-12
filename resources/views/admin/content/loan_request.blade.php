@@ -1014,6 +1014,9 @@
                             <th data-field="date" data-formatter="formatter.schedule.date">Date</th>
                             <th data-field="payment.receipt_no">Receipt No.</th>
                             <th data-field="amount" data-formatter="formatter.schedule.amount">Amount</th>
+                            <th data-field="amount" data-formatter="formatter.schedule.payment">Payment</th>
+                            <th data-field="amount" data-formatter="formatter.schedule.penalty">Penalty</th>
+                            <th data-field="amount" data-formatter="formatter.schedule.balance">Balance</th>
                             <th data-field="payment_action" data-formatter="formatter.schedule.payment_action"></th>
                         </tr>
                     </thead>

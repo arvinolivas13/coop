@@ -7,6 +7,8 @@ var selected_request = null;
 var schedule_id = null;
 var detail_id = null
 
+var total_loan = 0;
+
 function print(id) {
     var html = '';
     $.get(`/loan-request/edit/${id}`, function(response) {
@@ -239,7 +241,10 @@ function viewSchedule(id) {
         var no = 0;
         var schedule = '';
         var payment = '';
+        var total_p = 0;
         var total_loan_amount = (parseFloat(d.loan_amount) + parseFloat(d.total_interest));
+
+        total_loan = total_loan_amount;
 
         $('#ld_account_no').text(d.member.acc_no !== null?formatNumber(d.member.acc_no):"-");
         $('#ld_borrower').text(`${d.member.firstname} ${d.member.middlename} ${d.member.lastname}`);
@@ -292,6 +297,7 @@ function viewSchedule(id) {
         $.each(d.schedule, (i,v)=>{
             if(v.payment !== null) {
                 no = no + 1;
+                total_p += parseFloat(v.payment.amount);
                 payment += `<tr>
                     <td style="border:1px solid #000;padding:0 5px;width:5%;height:16px;font-weight:bold;">${no}</td>
                     <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${moment(v.payment.date).format('MMM DD, YYYY')}</td>
@@ -299,7 +305,7 @@ function viewSchedule(id) {
                     <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.payment.penalty)}</td>
                     <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${v.payment.user.name}</td>
                     <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${v.payment.receipt_no}</td>
-                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.payment.loan_balance - v.payment.amount)}</td>
+                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(total_loan - total_p)}</td>
                 </tr>`
             }
         });
@@ -339,6 +345,8 @@ function viewPayment(id) {
 
         var total_loan_amount = (parseFloat(response.record.loan_amount) + parseFloat(response.record.total_interest));
         var balance = parseFloat(total_loan_amount) - parseFloat(response.total_payment);
+
+        total_loan = total_loan_amount;
 
         $('#schd_account_no').text(response.record.member.acc_no!==null?formatNumber(response.record.member.id):'-');
         $('#schd_account_name').text(`${response.record.member.firstname} ${response.record.member.middlename} ${response.record.member.lastname}`);
@@ -405,6 +413,9 @@ function checkInterestRate2(date_1, date_2) {
 
 function pay(type) {
     var data = {};
+    
+    loading('show');
+
     if(type === 0) {
         data = {
             _token: $('meta[name="csrf-token"]').attr('content'),
@@ -431,10 +442,15 @@ function pay(type) {
             status: 1,
         };
     }
+    
 
     $.post('/loan-request/save-payment', data).done((response)=>{
         viewPayment(selected_request.loan_request_id);
         $('#payLoanModal').modal('hide');
+        loading('hide');
+    }).fail((response) => {
+        alert("Please enter the receipt no.");
+        loading('hide');
     });
 }
 
@@ -637,6 +653,9 @@ function useConvert() {
     $('#viewChartModal').modal('hide');
 }
 
+
+var s = 0;
+
 var formatter = {
     account_number(v, r, i) {
         return formatNumber(r.id);
@@ -719,6 +738,18 @@ var formatter = {
         },
         amount(v, r, i) {
             return currency(r.amount);
+        },
+        payment(v, r, i) {
+            return r.payment!==null?currency(r.payment.amount):'-';
+        },
+        penalty(v, r, i) {
+            return r.payment!==null?currency(r.payment.penalty):'-';
+        },
+        balance(v, r, i) {
+            if(r.payment!==null) {
+                s += parseFloat(r.payment.amount);
+            }
+            return r.payment!==null?currency(total_loan - s):'-';
         },
         payment_action(v, r, i) {
             return r.status === "draft"? "<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>":"<span class='text-danger'>PAID</span>"
