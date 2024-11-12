@@ -60,6 +60,16 @@
                 </div>
             </div>
         </div>
+
+        <div id="loadingModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content modal-sm">
+                    <div class="modal-body">
+                        <div>Processing...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="/js/vendor/jquery-1.12.4.min.js"></script>
@@ -85,6 +95,7 @@
     <script src="/js/calendar/fullcalendar-active.js"></script>
     <script src="/js/plugins.js"></script>
     <script src="/js/main.js"></script>
+    <script src="/js/custom/functions.js"></script>
     
     @yield('script')
 </body>
