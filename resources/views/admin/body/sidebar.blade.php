@@ -37,6 +37,17 @@
                     
                     <li>
                         <a class="has-arrow" href="#" aria-expanded="false">
+                            <span class="educate-icon educate-data-table icon-wrap"></span> <span class="mini-click-non">Maintenance</span>
+                        </a>
+                        <ul class="submenu-angle" aria-expanded="false">
+                            <li>
+                                <a title="Expense" href="{{url('/expense')}}"><span class="mini-sub-pro">Expense</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a class="has-arrow" href="#" aria-expanded="false">
                             <span class="educate-icon educate-data-table icon-wrap"></span> <span class="mini-click-non">Reports</span>
                         </a>
                         <ul class="submenu-angle" aria-expanded="false">

@@ -63,3 +63,8 @@ table#editable_schedule input {
 #chart_btn {
     display: none;
 }
+
+span.status-complete {
+    color: green;
+    font-weight: bold;
+}

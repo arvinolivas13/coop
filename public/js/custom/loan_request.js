@@ -121,6 +121,13 @@ function release(id) {
     $('#approvalModal').modal('show');
 }
 
+function complete(id) {
+    record.id = id;
+
+    $('.status-modal').text('complete');
+    $('#approvalModal').modal('show');
+}
+
 function yesApprove() {
     $.get(`/loan-request/${$('.status-modal').text()}/${record.id}`, function(response) {
         $('#table').bootstrapTable('refresh');
@@ -297,18 +304,20 @@ function viewSchedule(id) {
         });
 
         $.each(d.schedule, (i,v)=>{
-            if(v.payment !== null) {
-                no = no + 1;
-                total_p += parseFloat(v.payment.amount);
-                payment += `<tr>
-                    <td style="border:1px solid #000;padding:0 5px;width:5%;height:16px;font-weight:bold;">${no}</td>
-                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${moment(v.payment.date).format('MMM DD, YYYY')}</td>
-                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.payment.amount)}</td>
-                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.payment.penalty)}</td>
-                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${v.payment.user.name}</td>
-                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${v.payment.receipt_no}</td>
-                    <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(total_loan - total_p)}</td>
-                </tr>`
+            if(v.payment.length !== 0) {
+                $.each(v.payment, (i,v)=>{
+                    no = no + 1;
+                    total_p += parseFloat(v.amount);
+                    payment += `<tr>
+                        <td style="border:1px solid #000;padding:0 5px;width:5%;height:16px;font-weight:bold;">${no}</td>
+                        <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${moment(v.date).format('MMM DD, YYYY')}</td>
+                        <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.amount)}</td>
+                        <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(v.penalty)}</td>
+                        <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${v.user.name}</td>
+                        <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${v.receipt_no}</td>
+                        <td style="border:1px solid #000;padding:0 5px;width:auto;height:16px;font-weight:bold;">${currency(total_loan - total_p)}</td>
+                    </tr>`
+                });
             }
         });
 
@@ -658,6 +667,7 @@ function useConvert() {
 
 
 
+
 var formatter = {
     account_number(v, r, i) {
         return formatNumber(r.id);
@@ -727,12 +737,15 @@ var formatter = {
             status = `<button class="btn btn-sm btn-light" onclick="release(${r.id})">RELEASE</button> <button class="btn btn-sm btn-light" title="Payment Schedule" onclick="viewSchedule(${r.id})"><i class="fa fa-calendar"></i></button>`;
         }
         else if(r.status === "release") {
-            status = `<button class="btn btn-sm btn-light" title="Payment Schedule" onclick="viewSchedule(${r.id})"><i class="fa fa-calendar"></i></button> <button class="btn btn-sm btn-success" title="Payment" onclick="viewPayment(${r.id})"><i class="fa fa-money"></i></button>`;
+            status = `<button class="btn btn-sm btn-light" title="Payment Schedule" onclick="viewSchedule(${r.id})"><i class="fa fa-calendar"></i></button> <button class="btn btn-sm btn-success" title="Payment" onclick="viewPayment(${r.id})"><i class="fa fa-money"></i></button> <button class="btn btn-sm btn-success" title="Payment" onclick="complete(${r.id})">COMPLETE</button>`;
+        }
+        else if(r.status === "complete") {
+            status = `<button class="btn btn-sm btn-light" title="Payment Schedule" onclick="viewSchedule(${r.id})"><i class="fa fa-calendar"></i></button>`;
         }
         return status;
     },
     status(v, r, i) {
-        return "<span class='status-"+r.status+"'>" + (r.status === "draft"?"FOR CHECKING":(r.status === "approve"?"APPROVED":(r.status === "decline"?"DECLINED":"RELEASED"))) + "</span>";
+        return "<span class='status-"+r.status+"'>" + (r.status === "draft"?"FOR CHECKING":(r.status === "approve"?"APPROVED":(r.status === "decline"?"DECLINED":(r.status === "complete"?"COMPLETED":"RELEASED")))) + "</span>";
     },
     schedule: {
         date(v, r, i) {
@@ -754,7 +767,7 @@ var formatter = {
             return r.payment!==null?currency(total_loan - s):'-';
         },
         payment_action(v, r, i) {
-            return r.status === "draft"? "<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>":"<span class='text-danger'>PAID</span>"
+            return r.status === "draft"? "<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>" : (r.amount > r.payment.amount?"<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>":"<span class='text-danger'>PAID</span>");
         }
     }
 }

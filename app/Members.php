@@ -39,6 +39,8 @@ class Members extends Model
         'contact_person_no',
         'contact_person_address',
         'status',
+        'member_status',
+        'closed_date',
         'created_by',
         'updated_by',
         'deleted_at'

@@ -30,6 +30,6 @@ class LoanSchedule extends Model
     
     public function payment()
     {
-        return $this->belongsTo(LoanPayment::class, 'id', 'loan_schedule_id');
+        return $this->hasMany(LoanPayment::class, 'loan_schedule_id', 'id');
     }
 }

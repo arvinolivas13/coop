@@ -26,6 +26,7 @@ Route::group(['prefix' => 'member', 'middleware' => ['auth']], function (){
     Route::get          ('/get',                         'MembersController@get'                            )->name('get');
     Route::post         ('/save',                        'MembersController@save'                           )->name('save');
     Route::get          ('/edit/{id}',                   'MembersController@edit'                           )->name('reason');
+    Route::post         ('/close-account',               'MembersController@closeAccount'                   )->name('close');
     Route::post         ('/update/{id}',                 'MembersController@update'                         )->name('update');
     Route::get          ('/destroy/{id}',                'MembersController@destroy'                        )->name('destroy');
     Route::get          ('/destroy-beneficiary/{id}',    'MembersController@destroyBeneficiaries'           )->name('destroy');
@@ -62,6 +63,7 @@ Route::group(['prefix' => 'loan-request', 'middleware' => ['auth']], function ()
     Route::get          ('/approve/{id}',                'LoanRequestController@approve'                    )->name('approve');
     Route::get          ('/decline/{id}',                'LoanRequestController@decline'                    )->name('decline');
     Route::get          ('/release/{id}',                'LoanRequestController@release'                    )->name('release');
+    Route::get          ('/complete/{id}',               'LoanRequestController@complete'                   )->name('complete');
     Route::get          ('/get-details/{id}',            'LoanRequestController@getDetails'                 )->name('get');
     Route::get          ('/get-loan-details/{id}',       'LoanRequestController@getLoanDetails'             )->name('get');
     Route::get          ('/get-schedule/{id}',           'LoanRequestController@getSchedule'                )->name('get');
@@ -106,4 +108,13 @@ Route::group(['prefix' => 'setup', 'middleware' => ['auth']], function (){
         Route::post         ('/update/{id}',                 'RoleController@update'                        )->name('update');
         Route::get          ('/destroy/{id}',                'RoleController@destroy'                       )->name('destroy');
     });
+});
+
+Route::group(['prefix' => 'expense', 'middleware' => ['auth']], function (){
+    Route::get          ('/',                            'ExpenseController@index'                         )->name('page');
+    Route::get          ('/get',                         'ExpenseController@get'                           )->name('get');
+    Route::post         ('/save',                        'ExpenseController@save'                          )->name('save');
+    Route::get          ('/edit/{id}',                   'ExpenseController@edit'                          )->name('edit');
+    Route::post         ('/update/{id}',                 'ExpenseController@update'                        )->name('update');
+    Route::get          ('/destroy/{id}',                'ExpenseController@destroy'                       )->name('destroy');
 });

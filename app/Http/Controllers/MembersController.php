@@ -125,6 +125,10 @@ class MembersController extends Controller
 
         return response()->json();
     }
+
+    public function closeAccount(Request $request) {
+        Members::find($request->id)->update(['member_status' => 1, 'closed_date' => date('Y-m-d')]);
+    }
     
     public function destroyBeneficiaries($id)
     {

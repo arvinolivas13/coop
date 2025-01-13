@@ -34,7 +34,67 @@ span.member-price {
 }
 
 .schedule-list {
-    height: 345px;
+    height: 285px;
     overflow-x: hidden;
     overflow-y: auto !important;
 }
+
+.celebrants {
+    margin-top: 15px;
+    height: 305px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+
+span.c-name {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+}
+
+span.c-date {
+    font-size: 11px;
+    display: block;
+    color: #3f3f3f;
+    text-align: center;
+}
+
+.celebrants-photo {
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.celebrants-photo img {
+    border-radius: 50%;
+    height: auto;
+    width: 100%;
+    margin: auto;
+}
+
+.celebrants-info {
+    height: 50px;
+}
+
+.savers li {
+    font-size: 15px;
+}
+
+.savers ol {
+    padding: 5px 20px;
+}
+
+.savers-name {
+    color: #56ff5d;
+    padding: 0px 5px;
+}
+
+.savers-amount {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffe070;
+}
+
+.

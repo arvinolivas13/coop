@@ -44,3 +44,16 @@ span#cap_account_no {
 #chart_btn {
     display: none;
 }
+
+#table tr:has(.member_1) {
+    background: #fff8cb;
+    font-weight: bold;
+    text-decoration: line-through !important;
+    font-style: italic;
+    color: gray;
+}
+
+#savings tr:has(.withdraw),
+#capital tr:has(.withdraw) {
+    background: #ffcece;
+}

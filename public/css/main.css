@@ -278,3 +278,18 @@ textarea {
         page-break-after: avoid;
     }
 }
+
+
+ul.dropdown-header-top.author-log.dropdown-menu.animated.zoomIn {
+    margin-left: -50px;
+    top: 45px;
+}
+
+.bg-success {
+    background: #000000 !important;
+    color: #fff !important;
+}
+
+.bg-success h5 {
+    color: #fff !important;
+}

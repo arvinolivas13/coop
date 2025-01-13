@@ -97,9 +97,73 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10 bg-success"">
+                    <div class="analytics-content">
+                        <h5>Highest Savings Achievers</h5>
+                        <span>year {{date('Y')}}</span>
+                        <div class="savers">
+                            <ol type="1">
+                            @foreach ($top_savings as $item)
+                                <li>
+                                    <div class="savers-name">{{$item->fullname}}</div>
+                                    <div class="savers-amount">₱ {{number_format($item->total)}}</div>
+                                </li>
+                            @endforeach
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10 bg-success"">
+                    <div class="analytics-content">
+                        <h5>Leading Borrowers</h5>
+                        <span>year {{date('Y')}}</span>
+                        <div class="savers">
+                            <ol type="1">
+                            @foreach ($top_loan as $item)
+                                <li>
+                                    <div class="savers-name">{{$item->fullname}}</div>
+                                    <div class="savers-amount">₱ {{number_format($item->total)}}</div>
+                                </li>
+                            @endforeach
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10"">
+                    <div class="analytics-content">
+                        <h5>Birthday Celebrants</h5>
+                        <span>for the month of {{date('F')}}</span>
+                        <div class="celebrants">
+                            <div class="row">
+                                @foreach ($celebrants as $item)
+                                <div class="col-lg-4 col-md-4 mb-3">
+                                    <div class="celebrants-photo">
+                                        @if ($item->details !== null)
+                                        <img src="{{$item->details['photo'] !== null && $item->details['photo'] !== ''?"/storage/photo/".$item->details['photo']:"/img/profile/default.png"}}">
+                                        @else
+                                        <img src="/img/profile/default.png">
+                                        @endif
+                                    </div>
+                                    <div class="celebrants-info">
+                                        <span class="c-name">{{$item->firstname." ".$item->lastname}}</span>
+                                        <span class="c-date">{{date('M-d', strtotime($item->birthdate))}}</span>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10"">
                     <div class="analytics-content">
                         <h5>Loan Schedule</h5>
+                        <span>for the month of {{date('F')}}</span>
                         <div class="schedule-list">
                             @if (count($schedule) !== 0)
                                 @foreach ($schedule as $item)
@@ -127,7 +191,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="product-sales-chart">
                     <div class="portlet-title">
                         <div class="row">
@@ -141,29 +205,43 @@
                     <canvas id="myChart" width="400" height="200"></canvas>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10" style="background:rgba(255, 99, 132, 0.2);">
                     <div class="analytics-content">
                         <h5>Share Capital</h5>
                         <h2>₱ <span class="counter">{{number_format($share_capital, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10" style="background:rgba(54, 162, 235, 0.2);">
                     <div class="analytics-content">
                         <h5>Savings</h5>
                         <h2>₱ <span class="counter">{{number_format($savings, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10" style="background:rgba(255, 206, 86, 0.2);">
                     <div class="analytics-content">
                         <h5>Membership Fee</h5>
                         <h2>₱ <span class="counter">{{number_format($membership, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10" style="background:rgba(75, 192, 192, 0.2);">
                     <div class="analytics-content">
                         <h5>Processing Fee</h5>
                         <h2>₱ <span class="counter">{{number_format($processing_fee, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30 mg-ub-10" style="background:rgba(153, 102, 255, 0.2);">
+                    <div class="analytics-content">
+                        <h5>Expense</h5>
+                        <h2>₱ <span class="counter">{{number_format($expense, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
                     </div>
                 </div>
             </div>
@@ -204,16 +282,16 @@
     var myChart = new Chart(ctx, {
         type: 'bar', // Choose chart type (e.g., bar, line, pie, etc.)
         data: {
-            labels: ['Share Capital', 'Savings', 'Membership Fee', 'Processing Fee'],
+            labels: ['Share Capital', 'Savings', 'Membership Fee', 'Processing Fee', 'Expense'],
             datasets: [{
                 label: 'Sales',
-                data: [{{$share_capital}}, {{$savings}}, {{$membership}}, {{$processing_fee}}],
+                data: [{{$share_capital}}, {{$savings}}, {{$membership}}, {{$processing_fee}}, {{$expense}}],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(75, 192, 192, 0.2)',
-                    // 'rgba(153, 102, 255, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
                     // 'rgba(255, 159, 64, 0.2)'
                 ],
                 borderColor: [
@@ -221,7 +299,7 @@
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
-                    // 'rgba(153, 102, 255, 1)',
+                    'rgba(153, 102, 255, 1)',
                     // 'rgba(255, 159, 64, 1)'
                 ],
                 borderWidth: 1

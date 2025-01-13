@@ -273,6 +273,10 @@ class LoanRequestController extends Controller
     public function decline($id) {
         LoanRequest::where('id', $id)->update(['status' => 'decline', 'rejected_by' => Auth::user()->id, 'rejected_date' => date('Y-m-d')]);
     }
+
+    public function complete($id) {
+        LoanRequest::where('id', $id)->update(['status' => 'complete']);
+    }
     
     public function release($id) {
         $loan = LoanRequest::where('id', $id)->first();

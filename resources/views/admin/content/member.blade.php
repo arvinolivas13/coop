@@ -1111,6 +1111,23 @@
     </div>
 </div>
 
+<div id="closedAccountModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h5>Close Account</h5>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">Are you sure you want to close this acccount ?</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" data-dismiss="modal" >NO</button>
+                <button class="btn btn-primary" onclick="yesClose()">YES</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('style')

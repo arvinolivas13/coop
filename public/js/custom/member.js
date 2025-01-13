@@ -11,6 +11,10 @@ var record = {
     }
 };
 
+var total_savings = 0;
+var total_capital = 0;
+var member_id = null;
+
 var store_img = {
     signature: null,
     profile_photo: null
@@ -460,7 +464,7 @@ function loadCapital() {
 
         $('#table_capital tbody').html(table);
         
-        $('#cap_account_no').text(record.acc_no !== null?formatNumber(record.acc_no):'-');
+        $('#cap_account_no').text(response.record.acc_no !== null?formatNumber(parseInt(response.record.acc_no)):'-');
         $('#cap_name').text(`${response.record.firstname} ${response.record.middlename} ${response.record.lastname}`);
         $('#cap_contact').text(`${response.record.mobile_no}`);
         $('#cap_address').text(`${response.record.address}`);
@@ -571,7 +575,7 @@ function loadSavings() {
 
         $('#table_savings tbody').html(table);
         
-        $('#sav_account_no').text(record.acc_no !== null?formatNumber(record.acc_no):'-');
+        $('#sav_account_no').text(response.record.acc_no !== null?formatNumber(parseFloat(response.record.acc_no)):'-');
         $('#sav_name').text(`${response.record.firstname} ${response.record.middlename} ${response.record.lastname}`);
         $('#sav_contact').text(`${response.record.mobile_no}`);
         $('#sav_address').text(`${response.record.address}`);
@@ -761,13 +765,60 @@ function useConvert() {
     $('#viewChartModal').modal('hide');
 }
 
+function closedAccount(id, savings, capital) {
+    total_capital = capital;
+    total_savings = savings;
+    member_id = id;
+
+    $('#closedAccountModal').modal('show');
+}
+
+function yesClose() {
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-CA');
+    
+    if(total_savings > 0) {
+        var savings_data = {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            member_id: member_id,
+            receipt_number: '-',
+            amount: "-"+total_savings,
+            date: formattedDate
+        };
+        
+        $.post('/savings/save', savings_data).done(function(response) {
+            loadSavings();
+            $('#table').bootstrapTable('refresh');
+        });
+    }
+
+    if(total_capital > 0) {
+        var capital_data = {
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            member_id: member_id,
+            receipt_number: '-',
+            amount: "-"+total_capital,
+            date: formattedDate
+        };
+    
+        $.post('/capital/save', capital_data).done(function(response) {
+            loadCapital();
+            $('#table').bootstrapTable('refresh');
+        });
+    }
+
+    $.post('/member/close-account', { _token: $('meta[name="csrf-token"]').attr('content'), id: member_id }).done(function(response) {
+        $('#table').bootstrapTable('refresh');
+    });
+    
+}
 
 var formatter = {
     account_number(v, r, i) {
         return r.acc_no !== null ? formatNumber(r.acc_no):'-';
     },
     fullname(v, r, i) {
-        return `${r.firstname} ${r.middlename} ${r.lastname}`;
+        return `<div class="member_${r.member_status}">${r.firstname} ${r.middlename} ${r.lastname}</div>`;
     },
     gender(v, r, i) {
         return `${r.gender.toUpperCase()}`;
@@ -782,7 +833,8 @@ var formatter = {
         return `<span class="${r.status==="regular"?'text-success':'text-warning'}" style="font-weight:bold;">${r.status==="regular"?'REGULAR':'ASSOCIATE MEMBER OF THE SRSCC'}</span>`;
     },
     amount(v, r, i) {
-        return currency(r.amount);
+        
+        return `<span class="${r.amount < 0?'withdraw':''}">` + currency(r.amount) + `</span>`;
     },
     balance(v, r, i) {
         return currency(r.balance);
@@ -827,7 +879,21 @@ var formatter = {
         return `<span class="btn btn-light btn-sm" style="font-weight: bold;">${currency(amount)}</span>`;
     },
     action(v, r, i) {
-        return `<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>  <a href="#" onclick="applyLoan(${r.id}, '${r.firstname} ${r.middlename} ${r.lastname}', '${r.monthly_income}', ${r.acc_no},)" class="text-primary" title="Request Loan"><i class="fa fa-credit-card"></i></a> <a href="#" onclick="addDetails(${r.id})"><i class="fa fa-check text-success" aria-hidden="true"></i></a>`;
+        var savings = 0;
+        var capital = 0;
+
+        if(r.savings !== null) {
+            r.savings.forEach(item => {
+                savings += parseFloat(item.amount);
+            });
+        }
+        if(r.share_capital !== null) {
+            r.share_capital.forEach(item => {
+                capital += parseFloat(item.amount);
+            });
+        }
+
+        return (r.member_status === 0?`<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>  <a href="#" onclick="applyLoan(${r.id}, '${r.firstname} ${r.middlename} ${r.lastname}', '${r.monthly_income}', ${r.acc_no},)" class="text-primary" title="Request Loan"><i class="fa fa-credit-card"></i></a> <a href="#" onclick="addDetails(${r.id})"><i class="fa fa-check text-success" aria-hidden="true"></i></a> <a href="#" onclick="closedAccount(${r.id}, ${savings}, ${capital})"><i class="fa fa-ban text-danger" aria-hidden="true"></i></a>`:`<a href="#"><i class="fa fa-lock text-warning" aria-hidden="true"></i></a>`);
     },
     action_2(v, r, i) {
         return `<a href="#" onclick="editCapital(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'capital')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>`;

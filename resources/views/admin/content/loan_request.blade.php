@@ -27,7 +27,9 @@
                                         <th data-field="interest" data-formatter="formatter.interest">Interest</th>
                                         <th data-field="terms" data-formatter="formatter.terms">Term</th>
                                         <th data-field="comaker" data-formatter="formatter.comaker">Co-Maker</th>
-                                        <th data-field="status" data-formatter="formatter.status"></th>
+                                        <th data-field="status" data-formatter="formatter.status">
+                                            
+                                        </th>
                                         <th data-field="approve" class="approve-tbl" data-formatter="formatter.approve"></th>
                                     </tr>
                                 </thead>
