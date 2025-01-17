@@ -102,14 +102,18 @@
                         <h5>Highest Savings Achievers</h5>
                         <span>year {{date('Y')}}</span>
                         <div class="savers">
-                            <ol type="1">
-                            @foreach ($top_savings as $item)
-                                <li>
-                                    <div class="savers-name">{{$item->fullname}}</div>
-                                    <div class="savers-amount">₱ {{number_format($item->total)}}</div>
-                                </li>
-                            @endforeach
-                            </ol>
+                            @if (count($top_loan) === 0)
+                                <div class="text-center">No Record</div>
+                            @else
+                                <ol type="1">
+                                @foreach ($top_savings as $item)
+                                    <li>
+                                        <div class="savers-name">{{$item->fullname}}</div>
+                                        <div class="savers-amount">₱ {{number_format($item->total)}}</div>
+                                    </li>
+                                @endforeach
+                                </ol>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -120,14 +124,18 @@
                         <h5>Leading Borrowers</h5>
                         <span>year {{date('Y')}}</span>
                         <div class="savers">
-                            <ol type="1">
-                            @foreach ($top_loan as $item)
-                                <li>
-                                    <div class="savers-name">{{$item->fullname}}</div>
-                                    <div class="savers-amount">₱ {{number_format($item->total)}}</div>
-                                </li>
-                            @endforeach
-                            </ol>
+                            @if (count($top_loan) === 0)
+                                <div class="text-center">No Record</div>
+                            @else
+                                <ol type="1">
+                                @foreach ($top_loan as $item)
+                                    <li>
+                                        <div class="savers-name">{{$item->fullname}}</div>
+                                        <div class="savers-amount">₱ {{number_format($item->total)}}</div>
+                                    </li>
+                                @endforeach
+                                </ol>
+                            @endif
                         </div>
                     </div>
                 </div>
