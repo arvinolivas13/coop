@@ -755,16 +755,38 @@ var formatter = {
             return currency(r.amount);
         },
         payment(v, r, i) {
-            return r.payment!==null?currency(r.payment.amount):'-';
+            var total = 0;
+
+            if(r.payment.length !== 0) {
+                r.payment.forEach(element => {
+                    total += parseFloat(element.amount);
+                });
+            }
+
+            return currency(total);
         },
         penalty(v, r, i) {
-            return r.payment!==null?currency(r.payment.penalty):'-';
+            
+            var total = 0;
+
+            if(r.payment.length !== 0) {
+                r.payment.forEach(element => {
+                    total += parseFloat(element.penalty);
+                });
+            }
+
+            return currency(total);
         },
         balance(v, r, i) {
-            if(r.payment!==null) {
-                s += parseFloat(r.payment.amount);
+            
+
+            if(r.payment.length !== 0) {
+                r.payment.forEach(element => {
+                    s += parseFloat(element.amount);
+                });
             }
-            return r.payment!==null?currency(total_loan - s):'-';
+
+            return currency(total_loan - s);
         },
         payment_action(v, r, i) {
             return r.status === "draft"? "<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>" : (r.amount > r.payment.amount?"<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>":"<span class='text-danger'>PAID</span>");
