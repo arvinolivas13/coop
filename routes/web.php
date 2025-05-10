@@ -118,3 +118,12 @@ Route::group(['prefix' => 'expense', 'middleware' => ['auth']], function (){
     Route::post         ('/update/{id}',                 'ExpenseController@update'                        )->name('update');
     Route::get          ('/destroy/{id}',                'ExpenseController@destroy'                       )->name('destroy');
 });
+
+Route::group(['prefix' => 'loan-type', 'middleware' => ['auth']], function (){
+    Route::get          ('/',                            'InterestTypeController@index'                    )->name('page');
+    Route::get          ('/get',                         'InterestTypeController@get'                      )->name('get');
+    Route::post         ('/save',                        'InterestTypeController@save'                     )->name('save');
+    Route::get          ('/edit/{id}',                   'InterestTypeController@edit'                     )->name('edit');
+    Route::post         ('/update/{id}',                 'InterestTypeController@update'                   )->name('update');
+    Route::get          ('/destroy/{id}',                'InterestTypeController@destroy'                  )->name('destroy');
+});

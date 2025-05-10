@@ -6,6 +6,7 @@ use Auth;
 use App\Members;
 use App\MemberDetails;
 use App\MemberBeneficiary;
+use App\InterestType;
 use App\Transactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,8 @@ class MembersController extends Controller
     
     public function index()
     {
-        return view('admin.content.member');
+        $loan_type = InterestType::get();
+        return view('admin.content.member', compact('loan_type'));
     }
 
     public function get(Request $request)

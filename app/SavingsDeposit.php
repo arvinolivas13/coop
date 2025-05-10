@@ -16,6 +16,7 @@ class SavingsDeposit extends Model
         'receipt_number',
         'balance',
         'created_by',
-        'updated_by'
+        'updated_by',
+        'damayan_status'
     ];
 }

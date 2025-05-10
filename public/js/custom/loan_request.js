@@ -4,6 +4,8 @@ var record = {
 };
 
 var s = 0;
+
+var balance = 0;
 var selected_request = null;
 var schedule_id = null;
 var detail_id = null
@@ -173,6 +175,7 @@ function saveLoanRequest() {
     var data = {
         _token: $('meta[name="csrf-token"]').attr('content'),
         member_id: $('#member_id').val(),
+        loan_type_id: $('#loan_type_id').val(),
         income_type: $('#income_type').val(),
         income_amount: $('#income_amount').val(),
         payment_frequency: $('#payment_frequency').val(),
@@ -259,7 +262,7 @@ function viewSchedule(id) {
         $('#ld_borrower').text(`${d.member.firstname} ${d.member.middlename} ${d.member.lastname}`);
         $('#ld_amount').text(currency(d.loan_amount));
         $('#ld_terms').text(d.schedule.length + "(" + d.loan.payment_frequency + ")");
-        $('#ld_interest_rate').text(d.interest_rate + "%");
+        $('#ld_interest_rate').text(d.loan.loan_type.name + " (" + d.interest_rate + "%)");
         $('#ld_penalty_rate').text(d.penalty_rate + "%");
         $('#ld_date').text(moment(d.date_avail).format('MMM DD, YYYY'));
         $('#ld_first').text(moment(d.first_payment).format('MMM DD, YYYY'));
@@ -539,9 +542,16 @@ function selectFrequency() {
     countwithInterest();
 }
 
+function getRate() {
+    $.get('/loan-type/edit/' + $('#loan_type_id').val(), function(response) {
+        $('#loan_type_rate').val(response.record.rate);
+        countwithInterest();
+    });
+}
+
 function countwithInterest() {
     var loan = parseFloat($('#loan_amount').val() !== ""?$('#loan_amount').val():0);
-    var interest_rate = 4;
+    var interest_rate = parseFloat($('#loan_type_rate').val());
 
     var total = 0;
     var frequency = $('#payment_frequency').val();
@@ -677,7 +687,7 @@ var formatter = {
         var f = r.payment_frequency;
         var l = parseFloat(r.loan_amount);
 
-        var ir = 4; 
+        var ir = r.loan_type.rate; 
         var rate = 0;
 
         switch(f) {
@@ -721,6 +731,9 @@ var formatter = {
     },
     loan_amount(v, r, i) {
         return currency(r.loan_amount);
+    },
+    loan_type(v, r, i) {
+        return r.loan_type.name + " (" + r.loan_type.rate + "%)";
     },
     terms(v, r, i) {
         return r.no_of_payment + " (" + r.payment_frequency + ")";
@@ -785,11 +798,24 @@ var formatter = {
                     s += parseFloat(element.amount);
                 });
             }
+            balance = total_loan - s;
 
-            return currency(total_loan - s);
+            return currency(balance);
         },
         payment_action(v, r, i) {
-            return r.status === "draft"? "<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>" : (r.amount > r.payment.amount?"<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>":"<span class='text-danger'>PAID</span>");
+            
+            var total = 0;
+
+            if(r.payment.length !== 0) {
+                r.payment.forEach(element => {
+                    total += parseFloat(element.amount);
+                });
+            }
+
+            console.log(total, r.amount);
+
+            return r.status === "draft"? "<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>" : (parseFloat(r.amount).toFixed(2) > total && balance !== 0?"<button class='btn btn-sm btn-success' onclick='payLoan("+r.id+")'>PAY</button>":"<span class='text-danger'>PAID</span>");
         }
     }
 }
+ 

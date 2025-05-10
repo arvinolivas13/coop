@@ -23,6 +23,7 @@
                                         <th data-field="action" data-formatter="formatter.action">Action</th>
                                         <th data-field="account_number" data-formatter="formatter.account_no">Acc. #</th>
                                         <th data-field="fullname" data-formatter="formatter.fullname">Full Name</th>
+                                        <th data-field="loan_type" data-formatter="formatter.loan_type">Loan Type</th>
                                         <th data-field="loan_amount" data-formatter="formatter.loan_amount">Loan Amount</th>
                                         <th data-field="interest" data-formatter="formatter.interest">Interest</th>
                                         <th data-field="terms" data-formatter="formatter.terms">Term</th>
@@ -314,6 +315,18 @@
                             <input type="text" class="form-control" style="cursor:pointer !important;" placeholder="Member" aria-label="Member" aria-describedby="addon-wrapping" name="member" id="member" readonly>
                             <input type="hidden" class="form-control" name="member_id" id="member_id" readonly>
                             <span class="input-group-addon" style="cursor:pointer;" id="addon-wrapping"><i class="fa fa-search"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group required">
+                            <label>Loan Type:</label>
+                            <select name="loan_type_id" id="loan_type_id" class="form-control form-control-sm" onchange="getRate()">
+                                <option value=""></option>
+                                @foreach ($loan_type as $item)
+                                    <option value="{{$item->id}}">{{$item->name}} ({{$item->rate}}%)</option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" id="loan_type_rate" value="0">
                         </div>
                     </div>
                     <div class="col-md-6">

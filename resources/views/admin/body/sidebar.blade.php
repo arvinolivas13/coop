@@ -41,6 +41,9 @@
                         </a>
                         <ul class="submenu-angle" aria-expanded="false">
                             <li>
+                                <a title="Interest Type" href="{{url('/loan-type')}}"><span class="mini-sub-pro">Loan Type</span></a>
+                            </li>
+                            <li>
                                 <a title="Expense" href="{{url('/expense')}}"><span class="mini-sub-pro">Expense</span></a>
                             </li>
                         </ul>

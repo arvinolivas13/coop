@@ -657,6 +657,18 @@
                             <input type="text" class="form-control form-control-sm" id="account_name" name="account_name" disabled/>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group required">
+                            <label>Loan Type:</label>
+                            <select name="loan_type_id" id="loan_type_id" class="form-control form-control-sm" onchange="getRate()">
+                                <option value=""></option>
+                                @foreach ($loan_type as $item)
+                                    <option value="{{$item->id}}">{{$item->name}} ({{$item->rate}}%)</option>
+                                @endforeach
+                            </select>
+                            <input type="hidden" id="loan_type_rate" value="0">
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group required">
                             <label>Income Type:</label>
@@ -997,6 +1009,7 @@
             <div class="modal-footer">
                 <button class="btn btn-light" onclick="printFile('print_savings')">PRINT SAVINGS</button>
                 <button class="btn btn-primary" onclick="addSavings()">ADD SAVINGS</button>
+                <button class="btn btn-success" onclick="addDamayanFund()">ADD DAMAYAN FUND</button>
             </div>
         </div>
     </div>

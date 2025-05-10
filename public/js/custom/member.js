@@ -369,10 +369,18 @@ function applyLoan(id, name, monthly, acc_no) {
     $('#loanApplicationModal').modal('show');
 }
 
+function getRate() {
+    $.get('/loan-type/edit/' + $('#loan_type_id').val(), function(response) {
+        $('#loan_type_rate').val(response.record.rate);
+        countwithInterest();
+    });
+}
+
 function saveLoanRequest() {
     var data = {
         _token: $('meta[name="csrf-token"]').attr('content'),
         member_id: record.id,
+        loan_type_id: $('#loan_type_id').val(),
         income_type: $('#income_type').val(),
         income_amount: $('#income_amount').val(),
         payment_frequency: $('#payment_frequency').val(),
@@ -632,6 +640,27 @@ function saveSavings() {
     }
 }
 
+function addDamayanFund() {
+    var data = {
+        _token: $('meta[name="csrf-token"]').attr('content'),
+        member_id: record.id,
+        receipt_number: "-",
+        amount: "200",
+        date: moment().format("YYYY-MM-DD"),
+        damayan_status: 1
+    };
+    $.post('/savings/save', data).done(function(response) {
+        loadSavings();
+        $('#table').bootstrapTable('refresh');
+        $('#addSavingsModal').modal('hide');
+        $('#addSavingsModal .form-control').val('');
+    }).fail(function(response) {
+        $.each(response.responseJSON.errors, (i,v) => {
+            $('#sav_'+i).addClass('error');
+        });
+    });
+}
+
 function editSavings(id) {
     $.get(`/savings/edit/${id}`, function(response) {
 
@@ -703,7 +732,7 @@ function selectFrequency() {
 
 function countwithInterest() {
     var loan = parseFloat($('#loan_amount').val() !== ""?$('#loan_amount').val():0);
-    var interest_rate = 4;
+    var interest_rate = parseFloat($('#loan_type_rate').val());;
 
     var total = 0;
     var frequency = $('#payment_frequency').val();
@@ -834,7 +863,7 @@ var formatter = {
     },
     amount(v, r, i) {
         
-        return `<span class="${r.amount < 0?'withdraw':''}">` + currency(r.amount) + `</span>`;
+        return `<span class="${r.amount < 0?'withdraw':''} damayan_${r.damayan_status}">` + currency(r.amount) + `</span>`;
     },
     balance(v, r, i) {
         return currency(r.balance);

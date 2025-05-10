@@ -61,6 +61,7 @@ class HomeController extends Controller
         ->get();
 
         $total_fund = ($payment + $share_capital + $savings + $membership + $processing_fee) - ($loan + $expense);
+        
         $celebrants = Members::with('details')->whereMonth('birthdate', date('m'))->orderByRaw('MONTH(birthdate), DAY(birthdate)')->get();
 
         $schedule = LoanSchedule::with('member')->where('status', 'draft')->whereMonth('date', date('m'))->orderBy('date','asc')->limit(10)->get();

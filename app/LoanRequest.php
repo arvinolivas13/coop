@@ -11,6 +11,7 @@ class LoanRequest extends Model
 
     protected $fillable = [
         'member_id',
+        'loan_type_id',
         'income_type',
         'income_amount',
         'payment_frequency',
@@ -48,5 +49,10 @@ class LoanRequest extends Model
     public function details()
     {
         return $this->hasMany(LoanRequestDetails::class, 'loan_request_id', 'id');
+    }
+    
+    public function loan_type()
+    {
+        return $this->belongsTo(InterestType::class, 'loan_type_id');
     }
 }

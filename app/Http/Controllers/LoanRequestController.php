@@ -9,6 +9,7 @@ use DateInterval;
 use App\LoanRequest;
 use App\LoanDetails;
 use App\LoanSchedule;
+use App\InterestType;
 use App\LoanPayment;
 use App\LoanRequestDetails;
 use App\Transactions;
@@ -18,12 +19,13 @@ class LoanRequestController extends Controller
 {
     public function index()
     {
-        return view('admin.content.loan_request');
+        $loan_type = InterestType::get();
+        return view('admin.content.loan_request', compact('loan_type'));
     }
 
     public function get(Request $request)
     {
-        $query = LoanRequest::with('member', 'comaker')
+        $query = LoanRequest::with('member', 'comaker', 'loan_type')
         ->join('members', 'loan_requests.member_id', '=', 'members.id');
 
         if ($search = $request->input('search')) {
@@ -31,7 +33,7 @@ class LoanRequestController extends Controller
         }
         
         $total = $query->count();
-        $rows = $query->select('loan_requests.*')->skip($request->input('offset'))->take($request->input('limit'))->get();
+        $rows = $query->select('loan_requests.*')->skip($request->input('offset'))->take($request->input('limit'))->orderBy('id', 'desc')->get();
 
         return response()->json([
             'total' => $total,
@@ -118,7 +120,7 @@ class LoanRequestController extends Controller
     }
 
     public function approve($id) {
-        $request = LoanRequest::where('id', $id)->first();
+        $request = LoanRequest::with('loan_type')->where('id', $id)->first();
 
         $date = new DateTime($request->loan_date);
         $first = new DateTime($request->loan_date);
@@ -128,7 +130,7 @@ class LoanRequestController extends Controller
 
         $i_rate = 0;
         $p_rate = 0;
-        $ir = 4;
+        $ir = $request->loan_type->rate;
         $pr = 5;
         $interval = "";
         $dt_i = "";
@@ -305,7 +307,7 @@ class LoanRequestController extends Controller
     }
 
     public function getDetails($id) {
-        $record = LoanDetails::with('loan', 'member', 'schedule', 'schedule.payment', 'schedule.payment.user')->where('loan_request_id', $id)->first();
+        $record = LoanDetails::with('loan', 'loan.loan_type', 'member', 'schedule', 'schedule.payment', 'schedule.payment.user')->where('loan_request_id', $id)->first();
         $total_payment = LoanPayment::join('loan_schedules', 'loan_schedules.id', '=', 'loan_payments.loan_schedule_id')
                     ->where('loan_schedules.loan_details_id', $record->id)
                     ->sum('loan_payments.amount');

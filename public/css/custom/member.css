@@ -57,3 +57,10 @@ span#cap_account_no {
 #capital tr:has(.withdraw) {
     background: #ffcece;
 }
+
+#savings tr:has(.damayan_1) {
+    background: #09ff43;
+    font-weight: bold;
+    font-style: italic;
+    color: rgb(16, 114, 21);
+}
