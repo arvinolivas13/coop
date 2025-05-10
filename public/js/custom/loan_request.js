@@ -711,7 +711,7 @@ var formatter = {
 
                 break;
             case "daily":
-                rate = (ir / 30.44)/ 100;
+                rate = (ir / 30)/ 100;
                 break;
         }
         
