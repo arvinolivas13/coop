@@ -392,4 +392,21 @@ class LoanRequestController extends Controller
         ]);
     }
 
+    public function cancelTransaction($id) {
+        $request = LoanRequest::where('id', $id)->first();
+        $request_details = LoanRequestDetails::where('loan_request_id', $id)->first();
+        $details = LoanDetails::where('loan_request_id', $id)->first();
+
+        $schedule = LoanSchedule::where('loan_details_id', $details->id)->get();
+
+        foreach($schedule as $item) {
+            LoanPayment::where('loan_schedule_id', $item->id)->delete();
+        }
+
+        LoanSchedule::where('loan_details_id', $details->id)->delete();
+        LoanDetails::where('loan_request_id', $id)->delete();
+        LoanRequestDetails::where('loan_request_id', $id)->delete();
+        LoanRequest::where('id', $id)->delete();
+    }
+
 }

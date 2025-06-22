@@ -69,6 +69,7 @@ Route::group(['prefix' => 'loan-request', 'middleware' => ['auth']], function ()
     Route::get          ('/get-schedule/{id}',           'LoanRequestController@getSchedule'                )->name('get');
     Route::post         ('/save-payment',                'LoanRequestController@savePayment'                )->name('save');
     Route::get          ('/destroy-purpose/{id}',        'LoanRequestController@destroyPurpose'             )->name('destroy');
+    Route::get          ('/cancel-transaction/{id}',     'LoanRequestController@cancelTransaction'          )->name('destroy');
 });
 
 Route::group(['prefix' => 'loan-schedule', 'middleware' => ['auth']], function (){

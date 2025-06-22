@@ -675,6 +675,14 @@ function useConvert() {
     $('#viewChartModal').modal('hide');
 }
 
+function cancelTransaction(id) {
+    if (confirm("Are you sure you want to cancel this request? All transactions will be permanently deleted.")) {
+        $.get(`/loan-request/cancel-transaction/${id}`, function(response) {
+            $('#table').bootstrapTable('refresh');
+        });
+    } else {}
+}
+
 
 
 
@@ -739,7 +747,7 @@ var formatter = {
         return r.no_of_payment + " (" + r.payment_frequency + ")";
     },
     action(v, r, i) {
-        return r.status === "draft"?`<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>`:`<a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>`;
+        return (r.status === "draft"?`<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>`:`<a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>`) + ` <a href="#" onclick="cancelTransaction(${r.id})" class="text-danger" title="Cancel"><i class="fa fa-times-circle"></i></a`;
     },
     approve(v, r, i) {
         var status = "";
