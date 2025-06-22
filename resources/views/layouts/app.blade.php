@@ -7,7 +7,7 @@
     <title>San Roque Savings and Credit Cooperative</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/logo/SRSCC-LOGO.png">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/owl.carousel.css">
@@ -27,6 +27,17 @@
     <link rel="stylesheet" href="/css/responsive.css">
     <script src="/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
+
+<style>
+body {
+    background: url(/img/background.jpg);
+    background-position: center center;
+    background-size: cover;
+}
+.error-pagewrap {
+    background: #b9ffc67a;
+}
+</style>
 
 <body>
     

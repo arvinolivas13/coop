@@ -102,3 +102,11 @@ span.c-date {
     overflow: auto;
     overflow-x: hidden;
 }
+
+.bg-damayan {
+    background: #cc3132;
+}
+
+.bg-damayan h5, .bg-damayan h2 {
+    color: #fff !important;
+}

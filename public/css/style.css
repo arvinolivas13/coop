@@ -139,7 +139,7 @@ body {}
 /*  4. left sidebar
 /*----------------------------------------*/
 .all-content-wrapper {
-    margin-left: 200px;
+    /* margin-left: 200px; */
     transition: all 0.3s;
 }
 .left-sidebar-pro {
@@ -785,7 +785,7 @@ ul.setting-panel-list li{
     background: #F6F8FA;
 }
 .menu-switcher-pro .btn-info:active, .menu-switcher-pro .btn-info:focus, .menu-switcher-pro .btn-info:hover, .menu-switcher-pro .btn-info:visited, .header-drl-controller-btn.btn-info:active:focus{
-	background: #006c14;
+	/* background: #006c14; */
 }
 .header-right-info ul.header-right-menu li .message-view a, .header-right-info ul.header-right-menu li .notification-view a {
     border-top: 1px solid #c7290d;
@@ -2023,7 +2023,7 @@ ul.two-part-sp li{
     background: -webkit-linear-gradient(178deg, #e12503 0%, #85060c 100%);
     background: linear-gradient(178deg, #e12503 0%, #85060c 100%);
     z-index: 99;
-    left: 200px;
+    left: 240px;
     right: 0;
     top: 0;
     margin: 0 auto;
@@ -4113,7 +4113,7 @@ div#sparklinehome canvas {
 	font-weight:300;
 }
 .menu-switcher-pro .btn-info:active, .menu-switcher-pro .btn-info:focus, .menu-switcher-pro .btn-info:hover, .menu-switcher-pro .btn-info:visited, .header-drl-controller-btn.btn-info:active:focus{
-	background: #006c14;
+	/* background: #006c14; */
 	outline:none;
 }
 .mini-navbar .single-review-st-text img {
@@ -4716,7 +4716,7 @@ div#sparklinehome canvas {
 }
 
 .all-content-wrapper {
-    padding-top: 60px;
+    padding-top: 85px;
 }
 
 .modal-dialog {

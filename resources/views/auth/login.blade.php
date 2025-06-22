@@ -5,12 +5,12 @@
 <div class="error-pagewrap">
     <div class="error-page-int">
         <div class="text-center m-b-md custom-login">
-            <a href="index.html"><img class="main-logo" src="img/logo/logo.png" alt="" /></a>
-            <h3>LOGIN FORM</h3>
+            <img class="main-logo" src="img/logo/SRSCC-LOGO.png" alt="" width="200px"/>
         </div>
         <div class="content-error">
             <div class="hpanel">
                 <div class="panel-body">
+                    <h3 style="text-align:center;">LOGIN FORM</h3>
                     <form id="loginForm" method="post" action="{{ route('login') }}">
                         @csrf
                         <div class="form-group" style="margin-bottom:10px; display:block;">

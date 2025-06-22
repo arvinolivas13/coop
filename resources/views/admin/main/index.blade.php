@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" type="image/x-icon" href="/img/logo.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/logo/SRSCC-LOGO.png">
 	<meta name="csrf-token" content="{{	csrf_token() }}">
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">

@@ -2,25 +2,25 @@
 <div class="left-sidebar-pro">
     <nav id="sidebar" class="">
         <div class="sidebar-header">
-            <a href="index.html"><img class="main-logo" src="/img/logo/logo.png" alt="" /></a>
-            <strong><a href="index.html"><img src="/img/logo/logo.png" alt="" /></a></strong>
+            <a href="index.html"><img class="main-logo" src="/img/logo/SRSCC-LOGO.png" alt="" width="200px"/></a>
+            <strong><a href="index.html"><img src="/img/logo/SRSCC-LOGO.png" alt="" /></a></strong>
         </div>
         <div class="left-custom-menu-adp-wrap comment-scrollbar">
             <nav class="sidebar-nav left-sidebar-menu-pro">
                 <ul class="metismenu" id="menu1">
                     <li>
                         <a title="Landing Page" href="{{url('home')}}" aria-expanded="false">
-                            <span class="educate-icon educate-event icon-wrap sub-icon-mg" aria-hidden="true"></span> <span class="mini-click-non">Dashboard</span>
+                            <i class="fa fa-pie-chart"></i> <span class="mini-click-non">Dashboard</span>
                         </a>
                     </li>
                     <li>
                         <a title="Landing Page" href="{{url('member')}}" aria-expanded="false">
-                            <span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">Members</span>
+                            <i class="fa fa-users"></i> <span class="mini-click-non">Members</span>
                         </a>
                     </li>
                     <li>
                         <a class="has-arrow" href="#" aria-expanded="false">
-                            <span class="educate-icon educate-course icon-wrap"></span> <span class="mini-click-non">Loan</span>
+                            <i class="fa fa-money"></i> <span class="mini-click-non">Loan</span>
                         </a>
                         <ul class="submenu-angle" aria-expanded="false">
                             <li>
@@ -34,10 +34,15 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a title="Landing Page" href="{{url('damayan_fund')}}" aria-expanded="false">
+                            <img src="/img/logo/DAMAYAN-FUND.png" alt="DAMAYAN FUND" width="30px"> <span class="mini-click-non">Damayan Fund</span>
+                        </a>
+                    </li>
                     
                     <li>
                         <a class="has-arrow" href="#" aria-expanded="false">
-                            <span class="educate-icon educate-data-table icon-wrap"></span> <span class="mini-click-non">Maintenance</span>
+                            <i class="fa fa-desktop"></i> <span class="mini-click-non">Maintenance</span>
                         </a>
                         <ul class="submenu-angle" aria-expanded="false">
                             <li>
@@ -49,7 +54,7 @@
                         </ul>
                     </li>
                     
-                    <li>
+                    <!-- <li>
                         <a class="has-arrow" href="#" aria-expanded="false">
                             <span class="educate-icon educate-data-table icon-wrap"></span> <span class="mini-click-non">Reports</span>
                         </a>
@@ -58,11 +63,11 @@
                                 <a title="Transaction" href="{{url('/reports/transaction')}}"><span class="mini-sub-pro">Transaction</span></a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
                     
                     <li>
                         <a class="has-arrow" href="#" aria-expanded="false">
-                            <span class="educate-icon educate-professor icon-wrap"></span> <span class="mini-click-non">User Setup</span>
+                            <i class="fa fa-user"></i> <span class="mini-click-non">User Setup</span>
                         </a>
                         <ul class="submenu-angle" aria-expanded="false">
                             <li>

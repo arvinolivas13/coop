@@ -1,7 +1,7 @@
 @extends('admin.main.index')
 
 @section('page-screen')
-User Account
+Damayan Fund
 @endsection
 
 @section('content')
@@ -14,14 +14,16 @@ User Account
                     <div class="sparkline13-graph">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div id="toolbar">
-                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#memberModal" onclick="create()">ADD USER</button>
+                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#memberModal" onclick="create()">ADD FUND</button>
+                                <a href="/damayan_expense"  class="btn btn-sm btn-primary">ADD EXPENSE</a>
                             </div>
-                            <table id="table" data-toggle="table" data-url="/setup/user/get" data-pagination="true" data-search="true" data-side-pagination="server" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                            <table id="table" data-toggle="table" data-url="/damayan_fund/get" data-pagination="true" data-search="true" data-side-pagination="server" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
                                 <thead>
                                     <tr>
                                         <th data-field="action" data-formatter="formatter.action"></th>
-                                        <th data-field="name">Name</th>
-                                        <th data-field="email">Email</th>
+                                        <th data-field="name" data-formatter="formatter.fullname">Fullname</th>
+                                        <th data-field="date">Date</th>
+                                        <th data-field="amount">Amount</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -33,34 +35,36 @@ User Account
     </div>
 </div>
 
-<div id="userModal" class="modal fade" role="dialog">
+<div id="damayanModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content modal-m">
             <div class="modal-header">
-                <h5>Add Account</h5>
+                <h5>Add Fund</h5>
             </div>
             <div class="modal-close-area modal-close-df">
                 <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group required">
-                            <label>Name:</label>
-                            <input type="text" class="form-control form-control-sm" id="name" name="name"/>
+                    <div class="col-md-12 mb-3">
+                        <label>Member:</label>
+                        <div class="input-group" onclick="showMember('member')">
+                            <span class="input-group-addon member-acc-number-display" id="addon-wrapping">000</span>
+                            <input type="text" class="form-control" style="cursor:pointer !important;" placeholder="Member" aria-label="Member" aria-describedby="addon-wrapping" name="member" id="member" readonly>
+                            <input type="hidden" class="form-control" name="member_id" id="member_id" readonly>
+                            <span class="input-group-addon" style="cursor:pointer;" id="addon-wrapping"><i class="fa fa-search"></i></span>
                         </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group required">
-                            <label>Email:</label>
-                            <input type="email" class="form-control form-control-sm" id="email" name="email"/>
+                            <label>Amount:</label>
+                            <input type="number" class="form-control form-control-sm" id="amount" name="amount"/>
                         </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="form-group required">
-                            <label>Role:</label>
-                            <select name="role_id" id="role_id" class="form-control form-control-sm">
-                                <option value=""></option>
-                                @foreach ($roles as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
+                            <label>Date:</label>
+                            <input type="date" class="form-control form-control-sm" id="date" name="date"/>
                         </div>
                     </div>
                 </div>
@@ -76,7 +80,7 @@ User Account
     <div class="modal-dialog">
         <div class="modal-content modal-sm">
             <div class="modal-header">
-                <h5>User Account</h5>
+                <h5>Damayan Fund</h5>
             </div>
             <div class="modal-body">
                 <div class="mb-3">Are you sure you want to delete this record ?</div>
@@ -84,6 +88,33 @@ User Account
             <div class="modal-footer">
                 <button class="btn btn-light" data-dismiss="modal" >NO</button>
                 <button class="btn btn-primary" onclick="yesDelete()">YES</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="selectModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-m">
+            <div class="modal-header">
+                <h5>Member List</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="member_list" data-toggle="table" data-search="true" data-pagination="true">
+                            <thead>
+                                <tr>
+                                    <th data-field="account_number" data-formatter="formatter.account_number">Acc. #</th>
+                                    <th data-field="fullname" data-formatter="formatter.fullname_member">Name</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-light" data-dismiss="modal" >CLOSE</button>
             </div>
         </div>
     </div>
@@ -114,5 +145,5 @@ User Account
 <script src="/js/editable/moment.min.js"></script>
 <script src="/js/editable/bootstrap-datetimepicker.js"></script>
 <script src="/js/editable/bootstrap-editable.js"></script>
-<script src="/js/custom/user.js"></script>
+<script src="/js/custom/damayan_fund.js"></script>
 @endsection

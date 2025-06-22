@@ -1,5 +1,9 @@
 @extends('admin.main.index')
 
+@section('page-screen')
+Members
+@endsection
+
 @section('content')
 
 <div class="data-table-area mg-b-15">
@@ -7,11 +11,6 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="sparkline13-list">
-                    <div class="sparkline13-hd">
-                        <div class="main-sparkline13-hd">
-                            <h1>Members</h1>
-                        </div>
-                    </div>
                     <div class="sparkline13-graph">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div id="toolbar">

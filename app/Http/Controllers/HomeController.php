@@ -12,6 +12,8 @@ use App\Members;
 use App\Expense;
 use App\MemberDetails;
 use App\LoanSchedule;
+use App\DamayanFund;
+use App\DamayanFundExpense;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +25,7 @@ class HomeController extends Controller
 
     public function index()
     {
+        $damayan = DamayanFund::sum('amount') - DamayanFundExpense::sum('amount');
         $payment = LoanPayment::sum('amount') + LoanPayment::sum('penalty');
         $penalty = LoanPayment::sum('penalty');
         $principal = LoanDetails::sum('loan_amount');
@@ -85,7 +88,7 @@ class HomeController extends Controller
             ];
         }
 
-        return view('admin.content.dashboard', compact('payment', 'loan', 'receivable', 'share_capital', 'savings', 'membership', 'processing_fee', 'schedule', 'total_fund', 'percentage', 'principal', 'interest', 'penalty', 'celebrants', 'top_savings', 'top_loan', 'expense'));
+        return view('admin.content.dashboard', compact('damayan', 'payment', 'loan', 'receivable', 'share_capital', 'savings', 'membership', 'processing_fee', 'schedule', 'total_fund', 'percentage', 'principal', 'interest', 'penalty', 'celebrants', 'top_savings', 'top_loan', 'expense'));
     }
 
 

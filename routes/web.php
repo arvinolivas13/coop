@@ -119,6 +119,24 @@ Route::group(['prefix' => 'expense', 'middleware' => ['auth']], function (){
     Route::get          ('/destroy/{id}',                'ExpenseController@destroy'                       )->name('destroy');
 });
 
+Route::group(['prefix' => 'damayan_expense', 'middleware' => ['auth']], function (){
+    Route::get          ('/',                            'DamayanFundExpenseController@index'              )->name('page');
+    Route::get          ('/get',                         'DamayanFundExpenseController@get'                )->name('get');
+    Route::post         ('/save',                        'DamayanFundExpenseController@save'               )->name('save');
+    Route::get          ('/edit/{id}',                   'DamayanFundExpenseController@edit'               )->name('edit');
+    Route::post         ('/update/{id}',                 'DamayanFundExpenseController@update'             )->name('update');
+    Route::get          ('/destroy/{id}',                'DamayanFundExpenseController@destroy'            )->name('destroy');
+});
+
+Route::group(['prefix' => 'damayan_fund', 'middleware' => ['auth']], function (){
+    Route::get          ('/',                            'DamayanFundController@index'                     )->name('page');
+    Route::get          ('/get',                         'DamayanFundController@get'                       )->name('get');
+    Route::post         ('/save',                        'DamayanFundController@save'                      )->name('save');
+    Route::get          ('/edit/{id}',                   'DamayanFundController@edit'                      )->name('edit');
+    Route::post         ('/update/{id}',                 'DamayanFundController@update'                    )->name('update');
+    Route::get          ('/destroy/{id}',                'DamayanFundController@destroy'                   )->name('destroy');
+});
+
 Route::group(['prefix' => 'loan-type', 'middleware' => ['auth']], function (){
     Route::get          ('/',                            'InterestTypeController@index'                    )->name('page');
     Route::get          ('/get',                         'InterestTypeController@get'                      )->name('get');

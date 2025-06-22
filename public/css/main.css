@@ -293,3 +293,73 @@ ul.dropdown-header-top.author-log.dropdown-menu.animated.zoomIn {
 .bg-success h5 {
     color: #fff !important;
 }
+
+/* custom */
+.sidebar-header {
+    padding: 20px;
+}
+
+.sidebar-nav .metismenu a {
+    color: #006c14 !important;
+    padding: 10px 30px !important;
+    text-transform: uppercase;
+    font-size: 15px !important;
+}
+
+ul.submenu-angle.collapse.show a {
+    padding-left: 55px !important;
+}
+
+.sidebar-nav .metismenu a i {
+    width: 25px;
+    text-align: center;
+}
+
+.all-content-wrapper {
+    margin-left: 240px;
+}
+
+.header-top-area {
+    background: #f6f8fa !important;
+    padding: 10px 0px;
+}
+
+.bar-button-pro {
+    color: #006c14 !important;
+    font-weight: bold !important;
+}
+
+.header-right-info ul.header-right-menu > li > a {
+    color: #006c14 !important;
+}
+
+.header-right-info ul.header-right-menu > li > a, .header-right-info .admin-name {
+    color: #006c14 !important;
+}
+
+span.page-title-screen {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0 13px;
+    display: inline-block !important;
+    padding-top: 10px;
+    vertical-align: top;
+}
+
+.sparkline13-list {
+    background: transparent !important;
+    padding-top: 0px !important;
+}
+
+.table {
+    background: #fff !important;
+}
+
+.fixed-table-pagination {
+    background: #fff !important;
+}
+
+button.btn-primary {
+    background: #cc3132 !important;
+    border: 0px !important;
+}

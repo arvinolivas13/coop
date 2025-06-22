@@ -1,7 +1,7 @@
 @extends('admin.main.index')
 
 @section('page-screen')
-Role
+Damayan Fund Expense
 @endsection
 
 @section('content')
@@ -14,13 +14,16 @@ Role
                     <div class="sparkline13-graph">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div id="toolbar">
-                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#memberModal" onclick="create()">ADD ROLE</button>
+                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#memberModal" onclick="create()">ADD EXPENSE</button>
                             </div>
-                            <table id="table" data-toggle="table" data-url="/setup/role/get" data-pagination="true" data-search="true" data-side-pagination="server" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                            <table id="table" data-toggle="table" data-url="/damayan_expense/get" data-pagination="true" data-search="true" data-side-pagination="server" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
                                 <thead>
                                     <tr>
                                         <th data-field="action" data-formatter="formatter.action"></th>
-                                        <th data-field="name">Name</th>
+                                        <th data-field="title">Title</th>
+                                        <th data-field="details">Details</th>
+                                        <th data-field="date">Date</th>
+                                        <th data-field="amount">Amount</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -32,11 +35,11 @@ Role
     </div>
 </div>
 
-<div id="roleModal" class="modal fade" role="dialog">
+<div id="expenseModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content modal-m">
             <div class="modal-header">
-                <h5>Add Role</h5>
+                <h5>Add Expense</h5>
             </div>
             <div class="modal-close-area modal-close-df">
                 <a class="close" data-dismiss="modal" href="#"><i class="fa fa-close"></i></a>
@@ -45,8 +48,26 @@ Role
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group required">
-                            <label>Name:</label>
-                            <input type="text" class="form-control form-control-sm" id="name" name="name"/>
+                            <label>Title:</label>
+                            <input type="text" class="form-control form-control-sm" id="title" name="title"/>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group required">
+                            <label>Details:</label>
+                            <textarea name="details" id="details" class="form-control form-control-sm"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group required">
+                            <label>Amount:</label>
+                            <input type="number" class="form-control form-control-sm" id="amount" name="amount"/>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group required">
+                            <label>Date:</label>
+                            <input type="date" class="form-control form-control-sm" id="date" name="date"/>
                         </div>
                     </div>
                 </div>
@@ -62,7 +83,7 @@ Role
     <div class="modal-dialog">
         <div class="modal-content modal-sm">
             <div class="modal-header">
-                <h5>Role</h5>
+                <h5>Expense</h5>
             </div>
             <div class="modal-body">
                 <div class="mb-3">Are you sure you want to delete this record ?</div>
@@ -100,5 +121,5 @@ Role
 <script src="/js/editable/moment.min.js"></script>
 <script src="/js/editable/bootstrap-datetimepicker.js"></script>
 <script src="/js/editable/bootstrap-editable.js"></script>
-<script src="/js/custom/role.js"></script>
+<script src="/js/custom/damayan_expense.js"></script>
 @endsection
