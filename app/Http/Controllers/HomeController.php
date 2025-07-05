@@ -30,6 +30,17 @@ class HomeController extends Controller
         $penalty = LoanPayment::sum('penalty');
         $principal = LoanDetails::sum('loan_amount');
         $interest = LoanDetails::sum('total_interest');
+
+        $p_principal = DB::table('loan_details')
+                    ->join('loan_schedules', 'loan_details.id', '=', 'loan_schedules.loan_details_id')
+                    ->join('loan_payments', 'loan_schedules.id', '=', 'loan_payments.loan_schedule_id')
+                    ->sum('loan_schedules.principal_amount');
+                    
+        $p_interest = DB::table('loan_details')
+                    ->join('loan_schedules', 'loan_details.id', '=', 'loan_schedules.loan_details_id')
+                    ->join('loan_payments', 'loan_schedules.id', '=', 'loan_payments.loan_schedule_id')
+                    ->sum('loan_schedules.interest_amount');
+
         $loan = LoanDetails::sum('loan_amount') + LoanDetails::sum('total_interest');
         $receivable = $loan - ($payment - $penalty);
         
@@ -88,7 +99,7 @@ class HomeController extends Controller
             ];
         }
 
-        return view('admin.content.dashboard', compact('damayan', 'payment', 'loan', 'receivable', 'share_capital', 'savings', 'membership', 'processing_fee', 'schedule', 'total_fund', 'percentage', 'principal', 'interest', 'penalty', 'celebrants', 'top_savings', 'top_loan', 'expense'));
+        return view('admin.content.dashboard', compact('damayan', 'payment', 'loan', 'receivable', 'share_capital', 'savings', 'membership', 'processing_fee', 'schedule', 'total_fund', 'percentage', 'principal', 'interest', 'penalty', 'celebrants', 'top_savings', 'top_loan', 'expense', 'p_principal', 'p_interest'));
     }
 
 

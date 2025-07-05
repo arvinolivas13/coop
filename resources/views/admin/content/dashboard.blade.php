@@ -95,6 +95,26 @@ Dashboard
                 </div>
             </div>
         </div>
+        
+        <div class="row mb-3">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30">
+                    <div class="analytics-content">
+                        <h5>Principal Amount</h5>
+                        <h2>₱ <span class="counter">{{number_format($p_principal, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="analytics-sparkle-line reso-mg-b-30">
+                    <div class="analytics-content">
+                        <h5>Interest</h5>
+                        <h2>₱ <span class="counter">{{number_format($p_interest, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row mb-3">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30">
