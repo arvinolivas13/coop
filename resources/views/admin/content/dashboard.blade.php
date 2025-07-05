@@ -100,7 +100,7 @@ Dashboard
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30">
                     <div class="analytics-content">
-                        <h5>Principal Amount</h5>
+                        <h5>Principal Amount (for payment)</h5>
                         <h2>₱ <span class="counter">{{number_format($p_principal, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
                     </div>
                 </div>
@@ -108,7 +108,7 @@ Dashboard
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30">
                     <div class="analytics-content">
-                        <h5>Interest</h5>
+                        <h5>Interest (for payment)</h5>
                         <h2>₱ <span class="counter">{{number_format($p_interest, 2, '.', ',')}}</span> <span class="tuition-fees">Total</span></h2>
                     </div>
                 </div>
