@@ -47,8 +47,9 @@ class HomeController extends Controller
         $share_capital = ShareCapital::sum('amount');
         $expense = Expense::sum('amount');
         $savings = SavingsDeposit::sum('amount');
-        $membership = 200*MemberDetails::where('member_fee', '1')->count();
-        $processing_fee = 200*LoanDetails::count();
+        $membership = 200 * MemberDetails::where('member_fee', '1')->count();
+        // $processing_fee = 200 * LoanDetails::count();
+        $processing_fee =  LoanDetails::sum('processing_fee');
 
         $top_savings = SavingsDeposit::join('members', 'members.id', '=', 'savings_deposits.member_id')
         ->select(

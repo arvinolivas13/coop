@@ -23,6 +23,7 @@ Loan Request
                                         <th data-field="account_number" data-formatter="formatter.account_no">Acc. #</th>
                                         <th data-field="fullname" data-formatter="formatter.fullname">Full Name</th>
                                         <th data-field="loan_type" data-formatter="formatter.loan_type">Loan Type</th>
+                                        <th data-field="loan_date" data-formatter="formatter.loan_date">Date</th>
                                         <th data-field="loan_amount" data-formatter="formatter.loan_amount">Loan Amount</th>
                                         <th data-field="interest" data-formatter="formatter.interest">Interest</th>
                                         <th data-field="terms" data-formatter="formatter.terms">Term</th>

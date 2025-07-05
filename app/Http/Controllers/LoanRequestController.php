@@ -33,7 +33,7 @@ class LoanRequestController extends Controller
         }
         
         $total = $query->count();
-        $rows = $query->select('loan_requests.*')->skip($request->input('offset'))->take($request->input('limit'))->orderBy('id', 'desc')->get();
+        $rows = $query->select('loan_requests.*')->skip($request->input('offset'))->take($request->input('limit'))->orderBy('loan_date', 'asc')->get();
 
         return response()->json([
             'total' => $total,

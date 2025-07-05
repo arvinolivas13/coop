@@ -743,6 +743,9 @@ var formatter = {
     loan_type(v, r, i) {
         return r.loan_type.name + " (" + r.loan_type.rate + "%)";
     },
+    loan_date(v, r, i) {
+        return  moment(r.loan_date).format('MMM DD, YYYY');
+    },
     terms(v, r, i) {
         return r.no_of_payment + " (" + r.payment_frequency + ")";
     },
