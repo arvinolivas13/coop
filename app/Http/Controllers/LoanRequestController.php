@@ -25,7 +25,7 @@ class LoanRequestController extends Controller
 
     public function get(Request $request)
     {
-        $query = LoanRequest::with('member', 'comaker', 'loan_type')
+        $query = LoanRequest::with('member', 'comaker', 'loan_type', 'c_details')
         ->join('members', 'loan_requests.member_id', '=', 'members.id');
 
         if ($search = $request->input('search')) {
@@ -407,6 +407,16 @@ class LoanRequestController extends Controller
         LoanDetails::where('loan_request_id', $id)->delete();
         LoanRequestDetails::where('loan_request_id', $id)->delete();
         LoanRequest::where('id', $id)->delete();
+    }
+    
+    public function processingFee($id) {
+        $loan_details = LoanDetails::where('id', $id)->first();
+
+        return response()->json(compact('loan_details'));
+    }
+
+    public function saveProcessingFee(Request $request) {
+        LoanDetails::where('id', $request->id)->update(['processing_fee' => $request->processing_fee]);
     }
 
 }

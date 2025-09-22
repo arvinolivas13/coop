@@ -1008,7 +1008,7 @@ Members
             <div class="modal-footer">
                 <button class="btn btn-light" onclick="printFile('print_savings')">PRINT SAVINGS</button>
                 <button class="btn btn-primary" onclick="addSavings()">ADD SAVINGS</button>
-                <button class="btn btn-success" onclick="addDamayanFund()">ADD DAMAYAN FUND</button>
+                {{-- <button class="btn btn-success" onclick="addDamayanFund()">ADD DAMAYAN FUND</button> --}}
             </div>
         </div>
     </div>

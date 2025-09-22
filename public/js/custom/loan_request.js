@@ -12,6 +12,8 @@ var detail_id = null
 
 var total_loan = 0;
 
+var hold_id = 0;
+
 function print(id) {
     var html = '';
     $.get(`/loan-request/edit/${id}`, function(response) {
@@ -683,6 +685,28 @@ function cancelTransaction(id) {
     } else {}
 }
 
+function processingFee(id) {
+    hold_id = id;
+
+    $.get('/loan-request/processing-fee/'+id, function(response) {
+
+        $('#processing_fee').val(response.loan_details.processing_fee);
+        $('#processingFeeModal').modal('show');
+    });
+}
+
+function saveProcessingFee() {
+    var data = {
+        _token: $('meta[name="csrf-token"]').attr('content'),
+        id: hold_id,
+        processing_fee: $('#processing_fee').val()
+    };
+
+    $.post('/loan-request/save-processing-fee', data).done(function() {
+        $('#table').bootstrapTable('refresh');
+        $('#processingFeeModal').modal('hide');
+    });
+}
 
 
 
@@ -746,11 +770,14 @@ var formatter = {
     loan_date(v, r, i) {
         return  moment(r.loan_date).format('MMM DD, YYYY');
     },
+    processing_fee(v, r, i) {
+        return  currency(r.c_details !== null?r.c_details.processing_fee:0);
+    },
     terms(v, r, i) {
         return r.no_of_payment + " (" + r.payment_frequency + ")";
     },
     action(v, r, i) {
-        return (r.status === "draft"?`<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>`:`<a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>`) + ` <a href="#" onclick="cancelTransaction(${r.id})" class="text-danger" title="Cancel"><i class="fa fa-times-circle"></i></a`;
+        return (r.status === "draft"?`<a href="#" onclick="edit(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'member')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>  <a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>`:`<a href="#" onclick="print(${r.id})" class="text-warning" title="Print"><i class="fa fa-print"></i></a>`) + ` <a href="#" onclick="cancelTransaction(${r.id})" class="text-danger" title="Cancel"><i class="fa fa-times-circle"></i></a>` + ` <a href="#" onclick="processingFee(${r.id})" class="text-primary" title="Edit Processing Fee"><i class="fa fa-pencil"></i></a>`;
     },
     approve(v, r, i) {
         var status = "";

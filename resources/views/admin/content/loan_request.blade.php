@@ -27,6 +27,7 @@ Loan Request
                                         <th data-field="loan_amount" data-formatter="formatter.loan_amount">Loan Amount</th>
                                         <th data-field="interest" data-formatter="formatter.interest">Interest</th>
                                         <th data-field="terms" data-formatter="formatter.terms">Term</th>
+                                        <th data-field="processing_fee" data-formatter="formatter.processing_fee">Processing Fee</th>
                                         <th data-field="comaker" data-formatter="formatter.comaker">Co-Maker</th>
                                         <th data-field="status" data-formatter="formatter.status">
                                             
@@ -1151,6 +1152,27 @@ Loan Request
             <div class="modal-footer">
                 <button class="btn btn-light" data-dismiss="modal" >Cancel</button>
                 <button class="btn btn-primary" onclick="useConvert()">Use</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="processingFeeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h5>Update Processing Fee</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Processing Fee:</label>
+                        <input type="number" class="form-control" name="processing_fee" id="processing_fee"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="saveProcessingFee()">Save</button>
             </div>
         </div>
     </div>

@@ -51,6 +51,11 @@ class LoanRequest extends Model
         return $this->hasMany(LoanRequestDetails::class, 'loan_request_id', 'id');
     }
     
+    public function c_details()
+    {
+        return $this->belongsTo(LoanDetails::class, 'id', 'loan_request_id');
+    } 
+
     public function loan_type()
     {
         return $this->belongsTo(InterestType::class, 'loan_type_id');
