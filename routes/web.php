@@ -148,3 +148,5 @@ Route::group(['prefix' => 'loan-type', 'middleware' => ['auth']], function (){
     Route::post         ('/update/{id}',                 'InterestTypeController@update'                   )->name('update');
     Route::get          ('/destroy/{id}',                'InterestTypeController@destroy'                  )->name('destroy');
 });
+
+Route::post('/backup-database', 'DatabaseBackupController@backup')->name('backup.database');

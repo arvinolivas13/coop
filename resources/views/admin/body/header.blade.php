@@ -18,6 +18,9 @@
                                 <div class="header-right-info">
                                     <ul class="nav navbar-nav mai-top-nav header-right-menu">
                                         <li class="nav-item">
+                                            <button id="backupBtn">Backup Database</button>
+                                        </li>
+                                        <li class="nav-item">
                                             <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
                                                 <i class="fa fa-user"></i>
                                                 <span class="admin-name">Hello, {{Auth::user()->name}}</span>

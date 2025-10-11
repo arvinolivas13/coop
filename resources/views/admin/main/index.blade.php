@@ -98,6 +98,30 @@
     <script src="/js/custom/functions.js"></script>
     
     @yield('script')
+
+    <script>
+        $('#backupBtn').on('click', function() {
+            $.ajax({
+                url: '{{ route("backup.database") }}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#result').html('<p>' + response.message + '</p><a href="' + response.file + '" target="_blank">Download Backup</a>');
+                        alert('Back Up Successful');
+                    } else {
+                        $('#result').text('Failed: ' + response.message);
+                        alert('Back Up Failed');
+                    }
+                },
+                error: function(xhr) {
+                    $('#result').text('Error: ' + xhr.responseJSON.message);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
