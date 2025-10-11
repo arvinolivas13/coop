@@ -410,13 +410,13 @@ class LoanRequestController extends Controller
     }
     
     public function processingFee($id) {
-        $loan_details = LoanDetails::where('id', $id)->first();
+        $loan_details = LoanDetails::where('loan_request_id', $id)->first();
 
         return response()->json(compact('loan_details'));
     }
 
     public function saveProcessingFee(Request $request) {
-        LoanDetails::where('id', $request->id)->update(['processing_fee' => $request->processing_fee]);
+        LoanDetails::where('loan_request_id', $request->id)->update(['processing_fee' => $request->processing_fee]);
     }
 
 }
