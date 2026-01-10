@@ -24,13 +24,16 @@ class DatabaseBackupController extends Controller
         ];
 
         // Escape password and other inputs to avoid issues
+        $mysqldumpPath = '"C:\\xampp\\mysql\\bin\\mysqldump.exe"'; // note the double backslashes and quotes
+
         $command = sprintf(
-            'mysqldump --host=%s --user=%s --password=%s %s > %s',
-            escapeshellarg($db['host']),
-            escapeshellarg($db['username']),
-            escapeshellarg($db['password']),
-            escapeshellarg($db['database']),
-            escapeshellarg($storagePath . '/' . $filename)
+            '%s --host=%s --user=%s --password=%s %s > %s 2>&1',
+            $mysqldumpPath,
+            $db['host'],
+            $db['username'],
+            $db['password'],
+            $db['database'],
+            $storagePath . '\\' . $filename
         );
 
         $result = null;

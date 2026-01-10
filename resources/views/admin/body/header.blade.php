@@ -18,7 +18,7 @@
                                 <div class="header-right-info">
                                     <ul class="nav navbar-nav mai-top-nav header-right-menu">
                                         <li class="nav-item">
-                                            <button id="backupBtn">Backup Database</button>
+                                            <button id="backupBtn" class="btn btn-primary btn-sm">Backup Database</button>
                                         </li>
                                         <li class="nav-item">
                                             <a href="#" data-toggle="dropdown" role="button" aria-expanded="false" class="nav-link dropdown-toggle">
