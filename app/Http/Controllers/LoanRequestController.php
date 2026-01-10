@@ -232,7 +232,8 @@ class LoanRequestController extends Controller
 
         $details = LoanDetails::create($data_details);
 
-        while ($currentDate <= $range) {
+
+        for($ix = 1; $ix <= $request->no_of_payment; $ix++) {
             $data = array(
                 "member_id" => $request->member_id,
                 "loan_details_id" => $details->id,
@@ -245,10 +246,12 @@ class LoanRequestController extends Controller
                 "status" => "draft",
             );
 
+
             LoanSchedule::create($data);
 
             $currentDate->add($interval_2);
         }
+        
 
         if($request->payment_frequency === "weekly") {
             $data = array(
