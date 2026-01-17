@@ -19,6 +19,8 @@ Payment History
                                         <th data-field="action" data-formatter="formatter.action"></th>
                                         <th data-field="account_number" data-formatter="formatter.account_number">Acc. #</th>
                                         <th data-field="fullname" data-formatter="formatter.fullname">Full Name</th>
+                                        <th data-field="principal_amount" data-formatter="formatter.principal">Principal</th>
+                                        <th data-field="interest" data-formatter="formatter.interest">Interest</th>
                                         <th data-field="loan_amount" data-formatter="formatter.amount">Amount</th>
                                         <th data-field="penalty">Penalty</th>
                                         <th data-field="receipt_no">Receipt No.</th>
