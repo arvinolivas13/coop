@@ -21,6 +21,14 @@ class LoanPaymentController extends Controller
         if ($search = $request->input('search')) {
             $query->whereRaw("CONCAT(members.firstname, ' ', members.middlename, ' ', members.lastname) LIKE ?", ["%{$search}%"]);
         }
+
+        if ($dateFrom = $request->input('date_from')) {
+            $query->where('loan_payments.date', '>=', $dateFrom);
+        }
+
+        if ($dateTo = $request->input('date_to')) {
+            $query->where('loan_payments.date', '<=', $dateTo);
+        }
         
         $total = $query->count();
         $rows = $query->select('loan_payments.*')->skip($request->input('offset'))->take($request->input('limit'))->get();

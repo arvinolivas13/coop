@@ -68,3 +68,7 @@ span.status-complete {
     color: green;
     font-weight: bold;
 }
+
+button.btn.btn-primary {
+    padding: 7px 15px;
+}

@@ -3,6 +3,18 @@ var record = {
     action: 'save'
 };
 
+var filterParams = {};
+
+function queryParams(params) {
+    params.date_from = $('#date_from').val() || '';
+    params.date_to = $('#date_to').val() || '';
+    return params;
+}
+
+function filterByDate() {
+    $('#table').bootstrapTable('refresh', { url: '/loan-payment/get' });
+}
+
 function edit(id) {
     $.get(`/loan-payment/edit/${id}`, function(response) {
         var html = '';
@@ -93,3 +105,204 @@ var formatter = {
         return `${r.user.name}`;
     }
 }
+
+function exportToExcel() {
+    var $table = $('#table');
+    var opts = $table.bootstrapTable('getOptions');
+
+    function buildAndDownload(data) {
+        if(!data || !data.length) {
+            alert('No data to export');
+            return;
+        }
+
+        var rows = [];
+        var headers = ['Account Number','Full Name','Date','Principal','Interest','Amount','Received By'];
+        rows.push(headers);
+
+        data.forEach(function(r) {
+        var acc = r.member && r.member.acc_no !== null ? formatNumber(r.member.acc_no) : '-';
+        var fullname = `${r.member? r.member.firstname || '': ''} ${r.member? r.member.middlename || '': ''} ${r.member? r.member.lastname || '': ''}`.replace(/\s+/g,' ').trim();
+        var date = r.date ? moment(r.date).format('MMM DD, YYYY') : '';
+
+        var principal = '';
+        try {
+            var p = parseFloat(r.schedule.principal_amount || 0);
+            var amount = parseFloat(r.amount || 0);
+            var interest = parseFloat(r.schedule.interest_amount || 0);
+            var exceed = (amount - p) - interest;
+            var total = (exceed + p);
+            principal = currency(total);
+        } catch(e) {
+            principal = '';
+        }
+
+        var interest = r.schedule? currency(r.schedule.interest_amount || 0) : '';
+        var amount = r.amount ? currency(r.amount) : '';
+        var received_by = r.user? r.user.name : '';
+
+        rows.push([acc, fullname, date, principal, interest, amount, received_by]);
+    });
+        // Convert to CSV
+        var csvContent = '\uFEFF' + rows.map(function(row){
+            return row.map(function(cell){
+                if(cell === null || cell === undefined) return '';
+                var out = String(cell).replace(/"/g,'""');
+                return '"' + out + '"';
+            }).join(',');
+        }).join('\n');
+
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var filename = 'loan_payments_' + moment().format('YYYYMMDD_HHmmss') + '.csv';
+
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, filename);
+        } else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) { // feature detection
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    }
+
+    // If table is server-side paginated, request all data from the server using the table's url and queryParams
+    if(opts && opts.sidePagination === 'server' && opts.url) {
+        var url = opts.url;
+        var qparams = { limit: 1000000, offset: 0 };
+        
+        // Add date filters
+        var dateFrom = $('#date_from').val();
+        var dateTo = $('#date_to').val();
+        if(dateFrom) qparams.date_from = dateFrom;
+        if(dateTo) qparams.date_to = dateTo;
+        
+        if(typeof opts.queryParams === 'function') {
+            try {
+                qparams = opts.queryParams(qparams);
+            } catch(e) {
+                // qparams already set above
+            }
+        }
+
+        // attempt GET (some endpoints expect POST; adjust if needed)
+        $.get(url, qparams).done(function(response){
+            var rows = [];
+            if(response && Array.isArray(response)) rows = response;
+            else if(response && (response.rows || response.data)) rows = response.rows || response.data;
+            else if(response && response.data && response.data.rows) rows = response.data.rows;
+
+            buildAndDownload(rows);
+        }).fail(function() {
+            alert('Failed to fetch full data for export.');
+        });
+    } else {
+        var data = $table.bootstrapTable('getData');
+        buildAndDownload(data);
+    }
+}
+
+// expose globally so buttons can call it: <button onclick="exportToExcel()">Export</button>
+window.exportToExcel = exportToExcel;
+
+function exportAllToExcel() {
+    var $table = $('#table');
+    var opts = $table.bootstrapTable('getOptions');
+
+    function buildAndDownload(data) {
+        if(!data || !data.length) {
+            alert('No data to export');
+            return;
+        }
+
+        var rows = [];
+        var headers = ['Account Number','Full Name','Date','Principal','Interest','Amount','Received By'];
+        rows.push(headers);
+
+        data.forEach(function(r) {
+            var acc = r.member && r.member.acc_no !== null ? formatNumber(r.member.acc_no) : '-';
+            var fullname = `${r.member? r.member.firstname || '': ''} ${r.member? r.member.middlename || '': ''} ${r.member? r.member.lastname || '': ''}`.replace(/\s+/g,' ').trim();
+            var date = r.date ? moment(r.date).format('MMM DD, YYYY') : '';
+
+            var principal = '';
+            try {
+                var p = parseFloat(r.schedule.principal_amount || 0);
+                var amount = parseFloat(r.amount || 0);
+                var interest = parseFloat(r.schedule.interest_amount || 0);
+                var exceed = (amount - p) - interest;
+                var total = (exceed + p);
+                principal = currency(total);
+            } catch(e) {
+                principal = '';
+            }
+
+            var interest = r.schedule? currency(r.schedule.interest_amount || 0) : '';
+            var amount = r.amount ? currency(r.amount) : '';
+            var received_by = r.user? r.user.name : '';
+
+            rows.push([acc, fullname, date, principal, interest, amount, received_by]);
+        });
+        // Convert to CSV
+        var csvContent = '\uFEFF' + rows.map(function(row){
+            return row.map(function(cell){
+                if(cell === null || cell === undefined) return '';
+                var out = String(cell).replace(/"/g,'""');
+                return '"' + out + '"';
+            }).join(',');
+        }).join('\n');
+
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var filename = 'loan_payments_all_' + moment().format('YYYYMMDD_HHmmss') + '.csv';
+
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, filename);
+        } else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) { // feature detection
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    }
+
+    // Export ALL records without date filters
+    if(opts && opts.sidePagination === 'server' && opts.url) {
+        var url = opts.url;
+        var qparams = { limit: 1000000, offset: 0 };
+        
+        // Do NOT add date filters for export all
+        if(typeof opts.queryParams === 'function') {
+            try {
+                qparams = opts.queryParams(qparams);
+            } catch(e) {
+                // qparams already set above
+            }
+        }
+
+        $.get(url, qparams).done(function(response){
+            var rows = [];
+            if(response && Array.isArray(response)) rows = response;
+            else if(response && (response.rows || response.data)) rows = response.rows || response.data;
+            else if(response && response.data && response.data.rows) rows = response.data.rows;
+
+            buildAndDownload(rows);
+        }).fail(function() {
+            alert('Failed to fetch full data for export.');
+        });
+    } else {
+        var data = $table.bootstrapTable('getData');
+        buildAndDownload(data);
+    }
+}
+
+window.exportAllToExcel = exportAllToExcel;
