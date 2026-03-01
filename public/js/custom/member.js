@@ -922,7 +922,7 @@ var formatter = {
         return `<span class="btn btn-light btn-sm" style="font-weight: bold;">${currency(amount)}</span>`;
     },
     membership_fee(v, r, i) {
-        return r.details !== null && r.details !== undefined ? currency(200) : currency(0);
+        return (r.details && r.details.member_fee == 1) ? currency(200) : currency(0);
     },
     action(v, r, i) {
         var savings = 0;
@@ -985,7 +985,7 @@ function exportToExcel() {
             }
 
             var total_funds = capital + savings;
-            var membership_fee = (r.details !== null && r.details !== undefined) ? 200 : 0;
+            var membership_fee = (r.details && r.details.member_fee == 1) ? 200 : 0;
             var status = r.status === 'regular' ? 'REGULAR' : 'ASSOCIATE MEMBER OF THE SRSCC';
 
             rows.push([acc, fullname, mobile, birthday, gender, currency(capital), currency(savings), currency(total_funds), currency(membership_fee), status]);
@@ -1089,7 +1089,7 @@ function exportAllToExcel() {
             }
 
             var total_funds = capital + savings;
-            var membership_fee = (r.details !== null && r.details !== undefined) ? 200 : 0;
+            var membership_fee = (r.details && r.details.member_fee == 1) ? 200 : 0;
             var status = r.status === 'regular' ? 'REGULAR' : 'ASSOCIATE MEMBER OF THE SRSCC';
 
             rows.push([acc, fullname, mobile, birthday, gender, currency(capital), currency(savings), currency(total_funds), currency(membership_fee), status]);

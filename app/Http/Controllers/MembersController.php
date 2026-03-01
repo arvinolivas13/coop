@@ -22,7 +22,7 @@ class MembersController extends Controller
 
     public function get(Request $request)
     {
-        $query = Members::with('beneficiaries', 'share_capital', 'savings');
+        $query = Members::with('beneficiaries', 'share_capital', 'savings', 'details');
 
         if ($search = $request->input('search')) {
             $query->whereRaw("CONCAT(firstname, ' ', middlename, ' ', lastname) LIKE ?", ["%{$search}%"]);
