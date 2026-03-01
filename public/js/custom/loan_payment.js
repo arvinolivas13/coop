@@ -117,7 +117,7 @@ function exportToExcel() {
         }
 
         var rows = [];
-        var headers = ['Account Number','Full Name','Date','Principal','Interest','Amount','Received By'];
+        var headers = ['Account Number','Full Name','Date','Principal','Interest','Penalty','Amount','Received By'];
         rows.push(headers);
 
         data.forEach(function(r) {
@@ -138,10 +138,11 @@ function exportToExcel() {
         }
 
         var interest = r.schedule? currency(r.schedule.interest_amount || 0) : '';
+        var penalty = r.penalty ? currency(r.penalty) : '';
         var amount = r.amount ? currency(r.amount) : '';
         var received_by = r.user? r.user.name : '';
 
-        rows.push([acc, fullname, date, principal, interest, amount, received_by]);
+        rows.push([acc, fullname, date, principal, interest, penalty, amount, received_by]);
     });
         // Convert to CSV
         var csvContent = '\uFEFF' + rows.map(function(row){
@@ -221,7 +222,7 @@ function exportAllToExcel() {
         }
 
         var rows = [];
-        var headers = ['Account Number','Full Name','Date','Principal','Interest','Amount','Received By'];
+        var headers = ['Account Number','Full Name','Date','Principal','Interest','Penalty','Amount','Received By'];
         rows.push(headers);
 
         data.forEach(function(r) {
@@ -242,10 +243,11 @@ function exportAllToExcel() {
             }
 
             var interest = r.schedule? currency(r.schedule.interest_amount || 0) : '';
+            var penalty = r.penalty ? currency(r.penalty) : '';
             var amount = r.amount ? currency(r.amount) : '';
             var received_by = r.user? r.user.name : '';
 
-            rows.push([acc, fullname, date, principal, interest, amount, received_by]);
+            rows.push([acc, fullname, date, principal, interest, penalty, amount, received_by]);
         });
         // Convert to CSV
         var csvContent = '\uFEFF' + rows.map(function(row){
