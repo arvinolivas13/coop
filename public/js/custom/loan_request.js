@@ -856,4 +856,186 @@ var formatter = {
         }
     }
 }
+
+function queryParams(params) {
+    params.date_from = $('#date_from').val() || '';
+    params.date_to = $('#date_to').val() || '';
+    return params;
+}
+
+function filterByDate() {
+    $('#table').bootstrapTable('refresh', { url: '/loan-request/get' });
+}
+
+function statusText(status) {
+    if(status === 'draft') return 'FOR CHECKING';
+    if(status === 'approve') return 'APPROVED';
+    if(status === 'decline') return 'DECLINED';
+    if(status === 'complete') return 'COMPLETED';
+    return 'RELEASED';
+}
+
+function exportToExcel() {
+    var $table = $('#table');
+    var opts = $table.bootstrapTable('getOptions');
+
+    function buildAndDownload(data) {
+        if(!data || !data.length) {
+            alert('No data to export');
+            return;
+        }
+
+        var rows = [];
+        var headers = ['Account Number','Full Name','Loan Type','Date','Loan Amount','Interest','Term','Processing Fee','Co-Maker','Status'];
+        rows.push(headers);
+
+        data.forEach(function(r) {
+            var acc = r.member && r.member.acc_no !== null ? formatNumber(r.member.acc_no) : '-';
+            var fullname = `${r.member? r.member.firstname || '': ''} ${r.member? r.member.middlename || '': ''} ${r.member? r.member.lastname || '': ''}`.replace(/\s+/g,' ').trim();
+            var loan_type = r.loan_type? r.loan_type.name + ' (' + (r.loan_type.rate||'') + '%)' : '';
+            var date = r.loan_date ? moment(r.loan_date).format('MMM DD, YYYY') : '';
+            var loan_amount = r.loan_amount ? currency(r.loan_amount) : '';
+            var interest = r.total_interest ? currency(r.total_interest) : (r.interest?currency(r.interest):'');
+            var term = r.no_of_payment ? (r.no_of_payment + ' (' + r.payment_frequency + ')') : '';
+            var processing = r.c_details? currency(r.c_details.processing_fee || 0) : '';
+            var comaker = r.comaker? `${r.comaker.firstname} ${r.comaker.middlename} ${r.comaker.lastname}` : '';
+            var status = statusText(r.status);
+
+            rows.push([acc, fullname, loan_type, date, loan_amount, interest, term, processing, comaker, status]);
+        });
+
+        var csvContent = '\uFEFF' + rows.map(function(row){
+            return row.map(function(cell){
+                if(cell === null || cell === undefined) return '';
+                var out = String(cell).replace(/"/g,'""');
+                return '"' + out + '"';
+            }).join(',');
+        }).join('\n');
+
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var filename = 'loan_requests_' + moment().format('YYYYMMDD_HHmmss') + '.csv';
+
+        if (navigator.msSaveBlob) {
+            navigator.msSaveBlob(blob, filename);
+        } else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    }
+
+    if(opts && opts.sidePagination === 'server' && opts.url) {
+        var url = opts.url;
+        var qparams = { limit: 1000000, offset: 0 };
+
+        var dateFrom = $('#date_from').val();
+        var dateTo = $('#date_to').val();
+        if(dateFrom) qparams.date_from = dateFrom;
+        if(dateTo) qparams.date_to = dateTo;
+
+        if(typeof opts.queryParams === 'function') {
+            try { qparams = opts.queryParams(qparams); } catch(e) {}
+        }
+
+        $.get(url, qparams).done(function(response){
+            var rows = [];
+            if(response && Array.isArray(response)) rows = response;
+            else if(response && (response.rows || response.data)) rows = response.rows || response.data;
+            else if(response && response.data && response.data.rows) rows = response.data.rows;
+
+            buildAndDownload(rows);
+        }).fail(function() { alert('Failed to fetch full data for export.'); });
+    } else {
+        var data = $table.bootstrapTable('getData');
+        buildAndDownload(data);
+    }
+}
+
+window.exportToExcel = exportToExcel;
+
+function exportAllToExcel() {
+    var $table = $('#table');
+    var opts = $table.bootstrapTable('getOptions');
+
+    function buildAndDownload(data) {
+        if(!data || !data.length) { alert('No data to export'); return; }
+
+        var rows = [];
+        var headers = ['Account Number','Full Name','Loan Type','Date','Loan Amount','Interest','Term','Processing Fee','Co-Maker','Status'];
+        rows.push(headers);
+
+        data.forEach(function(r) {
+            var acc = r.member && r.member.acc_no !== null ? formatNumber(r.member.acc_no) : '-';
+            var fullname = `${r.member? r.member.firstname || '': ''} ${r.member? r.member.middlename || '': ''} ${r.member? r.member.lastname || '': ''}`.replace(/\s+/g,' ').trim();
+            var loan_type = r.loan_type? r.loan_type.name + ' (' + (r.loan_type.rate||'') + '%)' : '';
+            var date = r.loan_date ? moment(r.loan_date).format('MMM DD, YYYY') : '';
+            var loan_amount = r.loan_amount ? currency(r.loan_amount) : '';
+            var interest = r.total_interest ? currency(r.total_interest) : (r.interest?currency(r.interest):'');
+            var term = r.no_of_payment ? (r.no_of_payment + ' (' + r.payment_frequency + ')') : '';
+            var processing = r.c_details? currency(r.c_details.processing_fee || 0) : '';
+            var comaker = r.comaker? `${r.comaker.firstname} ${r.comaker.middlename} ${r.comaker.lastname}` : '';
+            var status = statusText(r.status);
+
+            rows.push([acc, fullname, loan_type, date, loan_amount, interest, term, processing, comaker, status]);
+        });
+
+        var csvContent = '\uFEFF' + rows.map(function(row){
+            return row.map(function(cell){
+                if(cell === null || cell === undefined) return '';
+                var out = String(cell).replace(/"/g,'""');
+                return '"' + out + '"';
+            }).join(',');
+        }).join('\n');
+
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var filename = 'loan_requests_all_' + moment().format('YYYYMMDD_HHmmss') + '.csv';
+
+        if (navigator.msSaveBlob) { navigator.msSaveBlob(blob, filename); }
+        else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    }
+
+    if(opts && opts.sidePagination === 'server' && opts.url) {
+        var url = opts.url;
+        var qparams = { limit: 1000000, offset: 0 };
+
+        if(typeof opts.queryParams === 'function') {
+            try { qparams = opts.queryParams(qparams); } catch(e) {}
+        }
+
+        // remove date filters for export all
+        delete qparams.date_from; delete qparams.date_to;
+
+        $.get(url, qparams).done(function(response){
+            var rows = [];
+            if(response && Array.isArray(response)) rows = response;
+            else if(response && (response.rows || response.data)) rows = response.rows || response.data;
+            else if(response && response.data && response.data.rows) rows = response.data.rows;
+
+            buildAndDownload(rows);
+        }).fail(function() { alert('Failed to fetch full data for export.'); });
+    } else {
+        var data = $table.bootstrapTable('getData');
+        buildAndDownload(data);
+    }
+}
+
+window.exportAllToExcel = exportAllToExcel;
  

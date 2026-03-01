@@ -26,7 +26,8 @@ class LoanRequestController extends Controller
     public function get(Request $request)
     {
         $query = LoanRequest::with('member', 'comaker', 'loan_type', 'c_details')
-        ->join('members', 'loan_requests.member_id', '=', 'members.id');
+        ->join('members', 'loan_requests.member_id', '=', 'members.id')
+        ->where('loan_requests.status', '!=', 'decline');
 
         if ($search = $request->input('search')) {
             $query->whereRaw("CONCAT(members.firstname, ' ', members.middlename, ' ', members.lastname) LIKE ?", ["%{$search}%"]);

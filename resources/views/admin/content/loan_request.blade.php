@@ -14,9 +14,16 @@ Loan Request
                     <div class="sparkline13-graph">
                         <div class="datatable-dashv1-list custom-datatable-overright">
                             <div id="toolbar">
-                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#memberModal" onclick="create()">ADD REQUEST</button>
+                                <label style="margin-right: 10px; margin-left: 10px; line-height: 34px;">Date From:</label>
+                                <input type="date" id="date_from" class="form-control" style="width: 150px; display: inline-block; margin-right: 15px;" />
+                                <label style="margin-right: 10px; line-height: 34px;">Date To:</label>
+                                <input type="date" id="date_to" class="form-control" style="width: 150px; display: inline-block; margin-right: 15px;" />
+                                <button type="button" class="btn btn-primary" onclick="filterByDate()"><i class="fa fa-filter"></i> Filter</button>
+                                <button type="button" class="btn btn-success" onclick="exportToExcel()"><i class="fa fa-file-excel-o"></i> Export Filtered</button>
+                                <button type="button" class="btn btn-info" onclick="exportAllToExcel()"><i class="fa fa-file-excel-o"></i> Export All</button>
+                                <button class="btn btn-sm btn-primary" style="margin-left: 15px;" data-toggle="modal" data-target="#memberModal" onclick="create()">ADD REQUEST</button>
                             </div>
-                            <table id="table" data-toggle="table" data-url="/loan-request/get" data-pagination="true" data-search="true" data-side-pagination="server" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar">
+                            <table id="table" data-toggle="table" data-url="/loan-request/get" data-pagination="true" data-search="true" data-side-pagination="server" data-show-columns="true" data-show-pagination-switch="true" data-show-refresh="true" data-key-events="true" data-show-toggle="true" data-resizable="true" data-show-export="true" data-click-to-select="true" data-toolbar="#toolbar" data-query-params="queryParams">
                                 <thead>
                                     <tr>
                                         <th data-field="action" data-formatter="formatter.action">Action</th>
