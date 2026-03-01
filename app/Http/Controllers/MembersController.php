@@ -32,6 +32,14 @@ class MembersController extends Controller
             $query->orWhereRaw("address LIKE ?", ["%{$search}%"]);
             $query->orWhereRaw("status LIKE ?", ["%{$search}%"]);
         }
+
+        if ($dateFrom = $request->input('date_from')) {
+            $query->where('created_at', '>=', $dateFrom);
+        }
+
+        if ($dateTo = $request->input('date_to')) {
+            $query->where('created_at', '<=', $dateTo . ' 23:59:59');
+        }
         
         $total = $query->count();
         $rows = $query->skip($request->input('offset'))->take($request->input('limit'))->get();

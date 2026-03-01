@@ -15,6 +15,16 @@ var total_savings = 0;
 var total_capital = 0;
 var member_id = null;
 
+function queryParams(params) {
+    params.date_from = $('#date_from').val() || '';
+    params.date_to = $('#date_to').val() || '';
+    return params;
+}
+
+function filterByDate() {
+    $('#table').bootstrapTable('refresh', { url: '/member/get' });
+}
+
 var store_img = {
     signature: null,
     profile_photo: null
@@ -81,6 +91,7 @@ function saveRecord() {
         contact_person_no: $('#contact_person_no').val(),
         contact_person_address: $('#contact_person_address').val(),
         status: $('#status').val(),
+        registration_date: $('#registration_date').val(),
         beneficiary: []
     };
 
@@ -855,6 +866,9 @@ var formatter = {
     birthdate(v, r, i) {
         return `${moment(r.birthdate).format('MMM DD, YYYY')}`;
     },
+    registration_date(v, r, i) {
+        return r.registration_date ? moment(r.registration_date).format('MMM DD, YYYY') : '-';
+    },
     beneficiary(v, r, i) {
         return `<i class="fa fa-users"></i> ${r.beneficiaries.length}`;
     },
@@ -907,6 +921,9 @@ var formatter = {
 
         return `<span class="btn btn-light btn-sm" style="font-weight: bold;">${currency(amount)}</span>`;
     },
+    membership_fee(v, r, i) {
+        return currency(200);
+    },
     action(v, r, i) {
         var savings = 0;
         var capital = 0;
@@ -931,3 +948,210 @@ var formatter = {
         return `<a href="#" onclick="editSavings(${r.id})" class="text-primary" title="Edit"><i class="fa fa-edit"></i></a> <a href="#" onclick="destroy(${r.id}, 'savings')" class="text-danger" title="Delete"><i class="fa fa-trash"></i></a>`;
     }
 }
+
+function exportToExcel() {
+    var $table = $('#table');
+    var opts = $table.bootstrapTable('getOptions');
+
+    function buildAndDownload(data) {
+        if(!data || !data.length) {
+            alert('No data to export');
+            return;
+        }
+
+        var rows = [];
+        var headers = ['Account Number','Full Name','Mobile Number','Birthday','Gender','Capital','Savings','Total Funds','Membership Fee','Status'];
+        rows.push(headers);
+
+        data.forEach(function(r) {
+            var acc = r.acc_no !== null ? formatNumber(r.acc_no) : '-';
+            var fullname = `${r.firstname || ''} ${r.middlename || ''} ${r.lastname || ''}`.replace(/\s+/g,' ').trim();
+            var mobile = r.mobile_no || '';
+            var birthday = r.birthdate ? moment(r.birthdate).format('MMM DD, YYYY') : '';
+            var gender = r.gender ? r.gender.toUpperCase() : '';
+
+            var capital = 0;
+            if(r.share_capital !== null) {
+                r.share_capital.forEach(item => {
+                    capital += parseFloat(item.amount || 0);
+                });
+            }
+
+            var savings = 0;
+            if(r.savings !== null) {
+                r.savings.forEach(item => {
+                    savings += parseFloat(item.amount || 0);
+                });
+            }
+
+            var total_funds = capital + savings;
+            var membership_fee = 200;
+            var status = r.status === 'regular' ? 'REGULAR' : 'ASSOCIATE MEMBER OF THE SRSCC';
+
+            rows.push([acc, fullname, mobile, birthday, gender, currency(capital), currency(savings), currency(total_funds), currency(membership_fee), status]);
+        });
+
+        // Convert to CSV
+        var csvContent = '\uFEFF' + rows.map(function(row){
+            return row.map(function(cell){
+                if(cell === null || cell === undefined) return '';
+                var out = String(cell).replace(/"/g,'""');
+                return '"' + out + '"';
+            }).join(',');
+        }).join('\n');
+
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var filename = 'members_' + moment().format('YYYYMMDD_HHmmss') + '.csv';
+
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, filename);
+        } else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) { // feature detection
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    }
+
+    // Export with date filters
+    if(opts && opts.sidePagination === 'server' && opts.url) {
+        var url = opts.url;
+        var qparams = { limit: 1000000, offset: 0 };
+        
+        var dateFrom = $('#date_from').val();
+        var dateTo = $('#date_to').val();
+        if(dateFrom) qparams.date_from = dateFrom;
+        if(dateTo) qparams.date_to = dateTo;
+        
+        if(typeof opts.queryParams === 'function') {
+            try {
+                qparams = opts.queryParams(qparams);
+            } catch(e) {
+                // qparams already set above
+            }
+        }
+
+        $.get(url, qparams).done(function(response){
+            var rows = [];
+            if(response && Array.isArray(response)) rows = response;
+            else if(response && (response.rows || response.data)) rows = response.rows || response.data;
+            else if(response && response.data && response.data.rows) rows = response.data.rows;
+
+            buildAndDownload(rows);
+        }).fail(function() {
+            alert('Failed to fetch full data for export.');
+        });
+    } else {
+        var data = $table.bootstrapTable('getData');
+        buildAndDownload(data);
+    }
+}
+
+function exportAllToExcel() {
+    var $table = $('#table');
+    var opts = $table.bootstrapTable('getOptions');
+
+    function buildAndDownload(data) {
+        if(!data || !data.length) {
+            alert('No data to export');
+            return;
+        }
+
+        var rows = [];
+        var headers = ['Account Number','Full Name','Mobile Number','Birthday','Gender','Capital','Savings','Total Funds','Membership Fee','Status'];
+        rows.push(headers);
+
+        data.forEach(function(r) {
+            var acc = r.acc_no !== null ? formatNumber(r.acc_no) : '-';
+            var fullname = `${r.firstname || ''} ${r.middlename || ''} ${r.lastname || ''}`.replace(/\s+/g,' ').trim();
+            var mobile = r.mobile_no || '';
+            var birthday = r.birthdate ? moment(r.birthdate).format('MMM DD, YYYY') : '';
+            var gender = r.gender ? r.gender.toUpperCase() : '';
+
+            var capital = 0;
+            if(r.share_capital !== null) {
+                r.share_capital.forEach(item => {
+                    capital += parseFloat(item.amount || 0);
+                });
+            }
+
+            var savings = 0;
+            if(r.savings !== null) {
+                r.savings.forEach(item => {
+                    savings += parseFloat(item.amount || 0);
+                });
+            }
+
+            var total_funds = capital + savings;
+            var membership_fee = 200;
+            var status = r.status === 'regular' ? 'REGULAR' : 'ASSOCIATE MEMBER OF THE SRSCC';
+
+            rows.push([acc, fullname, mobile, birthday, gender, currency(capital), currency(savings), currency(total_funds), currency(membership_fee), status]);
+        });
+
+        // Convert to CSV
+        var csvContent = '\uFEFF' + rows.map(function(row){
+            return row.map(function(cell){
+                if(cell === null || cell === undefined) return '';
+                var out = String(cell).replace(/"/g,'""');
+                return '"' + out + '"';
+            }).join(',');
+        }).join('\n');
+
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var filename = 'members_all_' + moment().format('YYYYMMDD_HHmmss') + '.csv';
+
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, filename);
+        } else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) { // feature detection
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    }
+
+    // Export ALL without date filters
+    if(opts && opts.sidePagination === 'server' && opts.url) {
+        var url = opts.url;
+        var qparams = { limit: 1000000, offset: 0 };
+        
+        // Do NOT add date filters for export all
+        if(typeof opts.queryParams === 'function') {
+            try {
+                qparams = opts.queryParams(qparams);
+            } catch(e) {
+                // qparams already set above
+            }
+        }
+
+        $.get(url, qparams).done(function(response){
+            var rows = [];
+            if(response && Array.isArray(response)) rows = response;
+            else if(response && (response.rows || response.data)) rows = response.rows || response.data;
+            else if(response && response.data && response.data.rows) rows = response.data.rows;
+
+            buildAndDownload(rows);
+        }).fail(function() {
+            alert('Failed to fetch full data for export.');
+        });
+    } else {
+        var data = $table.bootstrapTable('getData');
+        buildAndDownload(data);
+    }
+}
+
+window.exportToExcel = exportToExcel;
+window.exportAllToExcel = exportAllToExcel;

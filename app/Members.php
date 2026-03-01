@@ -41,6 +41,7 @@ class Members extends Model
         'status',
         'member_status',
         'closed_date',
+        'registration_date',
         'created_by',
         'updated_by',
         'deleted_at'
