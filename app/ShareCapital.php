@@ -18,4 +18,9 @@ class ShareCapital extends Model
         'created_by',
         'updated_by'
     ];
+
+    public function member()
+    {
+        return $this->belongsTo('App\Members', 'member_id');
+    }
 }

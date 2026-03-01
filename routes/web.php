@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::group(['prefix' => 'home', 'middleware' => ['auth']], function (){
     Route::get          ('/',                            'HomeController@index'                          )->name('page');
+    Route::get          ('/export-savings',              'HomeController@exportSavings'                  )->name('export');
+    Route::get          ('/export-capital',              'HomeController@exportCapital'                  )->name('export');
 });
 
 Route::group(['prefix' => 'member', 'middleware' => ['auth']], function (){

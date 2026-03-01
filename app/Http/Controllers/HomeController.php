@@ -103,5 +103,48 @@ class HomeController extends Controller
         return view('admin.content.dashboard', compact('damayan', 'payment', 'loan', 'receivable', 'share_capital', 'savings', 'membership', 'processing_fee', 'schedule', 'total_fund', 'percentage', 'principal', 'interest', 'penalty', 'celebrants', 'top_savings', 'top_loan', 'expense', 'p_principal', 'p_interest'));
     }
 
+    public function exportSavings()
+    {
+        $savings = SavingsDeposit::with('member')
+            ->orderBy('date', 'desc')
+            ->get();
+        $csv = "Member Name,Date,Receipt,Amount\n";
 
+        foreach ($savings as $record) {
+            $memberName = $record->member ? $record->member->firstname . ' ' . $record->member->lastname : '-';
+            $date = $record->date ? date('M d, Y', strtotime($record->date)) : '';
+            $receipt = $record->receipt_number ?? '';
+            $amount = number_format($record->amount, 2);
+            $csv .= '"' . str_replace('"', '""', $memberName) . '","' . str_replace('"', '""', $date) . '","' . str_replace('"', '""', $receipt) . '","' . $amount . '"' . "\n";
+        }
+
+        return response($csv, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="savings_' . date('Ymd_His') . '.csv"',
+            'Charset' => 'utf-8'
+        ]);
+    }
+
+    public function exportCapital()
+    {
+        $capital = ShareCapital::with('member')
+            ->orderBy('date', 'desc')
+            ->get();
+
+        $csv = "Member Name,Date,Receipt,Amount\n";
+
+        foreach ($capital as $record) {
+            $memberName = $record->member ? $record->member->firstname . ' ' . $record->member->lastname : '-';
+            $date = $record->date ? date('M d, Y', strtotime($record->date)) : '';
+            $receipt = $record->receipt_number ?? '';
+            $amount = number_format($record->amount, 2);
+            $csv .= '"' . str_replace('"', '""', $memberName) . '","' . str_replace('"', '""', $date) . '","' . str_replace('"', '""', $receipt) . '","' . $amount . '"' . "\n";
+        }
+
+        return response($csv, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="share_capital_' . date('Ymd_His') . '.csv"',
+            'Charset' => 'utf-8'
+        ]);
+    }
 }

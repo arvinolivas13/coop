@@ -19,4 +19,9 @@ class SavingsDeposit extends Model
         'updated_by',
         'damayan_status'
     ];
+
+    public function member()
+    {
+        return $this->belongsTo('App\Members', 'member_id');
+    }
 }

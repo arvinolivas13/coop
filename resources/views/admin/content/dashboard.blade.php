@@ -8,6 +8,10 @@ Dashboard
 <div class="analytics-sparkle-area">
     <div class="container-fluid">
         <div class="row mb-3">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-3">
+                <button class="btn btn-sm btn-primary mt-2" onclick="window.location.href='/home/export-capital'"><i class="fa fa-file-excel-o"></i> Export Share Capital</button>
+                <button class="btn btn-sm btn-primary mt-2 ml-2" onclick="window.location.href='/home/export-savings'"><i class="fa fa-file-excel-o"></i> Export Savings</button>
+            </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
                 <div class="analytics-sparkle-line reso-mg-b-30 bg-primary">
                     <div class="analytics-content">
