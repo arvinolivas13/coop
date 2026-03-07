@@ -30,12 +30,17 @@
 
 <style>
 body {
-    background: url(/img/background.jpg);
+    /* background: url(/img/background.jpg); */
     background-position: center center;
     background-size: cover;
 }
 .error-pagewrap {
     background: #b9ffc67a;
+}
+.side-form {
+    margin: auto;
+    width: 100%;
+    padding: 20px;
 }
 </style>
 

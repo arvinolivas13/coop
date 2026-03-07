@@ -34,11 +34,6 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a title="Landing Page" href="{{url('damayan_fund')}}" aria-expanded="false">
-                            <img src="/img/logo/DAMAYAN-FUND.png" alt="DAMAYAN FUND" width="30px"> <span class="mini-click-non">Damayan Fund</span>
-                        </a>
-                    </li>
                     
                     <li>
                         <a class="has-arrow" href="#" aria-expanded="false">

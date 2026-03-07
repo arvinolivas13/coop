@@ -939,6 +939,7 @@ function exportToExcel() {
         var dateTo = $('#date_to').val();
         if(dateFrom) qparams.date_from = dateFrom;
         if(dateTo) qparams.date_to = dateTo;
+        qparams.search = opts.searchText || '';
 
         if(typeof opts.queryParams === 'function') {
             try { qparams = opts.queryParams(qparams); } catch(e) {}
@@ -1021,7 +1022,7 @@ function exportAllToExcel() {
         }
 
         // remove date filters for export all
-        delete qparams.date_from; delete qparams.date_to;
+        delete qparams.date_from; delete qparams.date_to; delete qparams.search;
 
         $.get(url, qparams).done(function(response){
             var rows = [];

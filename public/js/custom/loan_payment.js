@@ -87,13 +87,13 @@ var formatter = {
         return moment(r.date).format('MMM DD, YYYY');
     },
     principal(v, r, i) {
-        var principal = parseFloat(r.schedule.principal_amount);
-        var amount = parseFloat(r.amount);
-        var interest = parseFloat(r.schedule.interest_amount);
-        var exceed = (amount - principal) - interest;
-        var total = (exceed + principal);
-        console.log(principal, amount, exceed, total);
-        return currency(total);
+        // var principal = parseFloat(r.schedule.principal_amount);
+        // var amount = parseFloat(r.amount);
+        // var interest = parseFloat(r.schedule.interest_amount);
+        // var exceed = (amount - principal) - interest;
+        // var total = (exceed + principal);
+        // console.log(principal, amount, exceed, total);
+        return currency(r.principal_total);
     },
     interest(v, r, i) {
         return currency(r.schedule.interest_amount);

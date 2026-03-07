@@ -119,18 +119,6 @@ Dashboard
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="analytics-sparkle-line reso-mg-b-30">
-                    <div class="analytics-content">
-                        <div class="row">
-                            <div class="col-md-6"><img src="/img/logo/DAMAYAN-FUND-LONG.png" alt="DAMAYAN FUND" width="200px"></div>
-                            <div class="col-md-6 text-right"><h1>₱ <span class="counter">{{number_format($damayan, 2, '.', ',')}}</span></h1></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 <div class="product-sales-area mg-tb-30">

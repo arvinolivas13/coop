@@ -26,23 +26,30 @@ class HomeController extends Controller
     public function index()
     {
         $damayan = DamayanFund::sum('amount') - DamayanFundExpense::sum('amount');
-        $payment = LoanPayment::sum('amount') + LoanPayment::sum('penalty');
+        
+        // Get payment totals using the specified query
+        $payment_totals = DB::select('SELECT
+            SUM(loan_payments.amount) as total_payment,
+            SUM(loan_payments.amount - loan_schedules.interest_amount) as principal_amount_payment,
+            SUM(loan_schedules.interest_amount) as interest_amount_payment
+            FROM loan_payments
+            JOIN members ON loan_payments.member_id = members.id
+            JOIN loan_schedules ON loan_payments.loan_schedule_id = loan_schedules.id');
+        
+        $total_payment = $payment_totals[0]->total_payment ?? 0;
+        $principal_amount_payment = $payment_totals[0]->principal_amount_payment ?? 0;
+        $interest_amount_payment = $payment_totals[0]->interest_amount_payment ?? 0;
+        
         $penalty = LoanPayment::sum('penalty');
+        $payment = $total_payment + $penalty;
+        
+        $p_principal = $principal_amount_payment;
+        $p_interest = $interest_amount_payment;
+        
         $principal = LoanDetails::sum('loan_amount');
         $interest = LoanDetails::sum('total_interest');
-
-        $p_principal = DB::table('loan_details')
-                    ->join('loan_schedules', 'loan_details.id', '=', 'loan_schedules.loan_details_id')
-                    ->join('loan_payments', 'loan_schedules.id', '=', 'loan_payments.loan_schedule_id')
-                    ->sum('loan_schedules.principal_amount');
-                    
-        $p_interest = DB::table('loan_details')
-                    ->join('loan_schedules', 'loan_details.id', '=', 'loan_schedules.loan_details_id')
-                    ->join('loan_payments', 'loan_schedules.id', '=', 'loan_payments.loan_schedule_id')
-                    ->sum('loan_schedules.interest_amount');
-
-        $loan = LoanDetails::sum('loan_amount') + LoanDetails::sum('total_interest');
-        $receivable = $loan - ($payment - $penalty);
+        $loan = $principal + $interest;
+        $receivable = $loan - ($principal_amount_payment + $interest_amount_payment);
         
         $share_capital = ShareCapital::sum('amount');
         $expense = Expense::sum('amount');
